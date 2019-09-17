@@ -1,0 +1,34 @@
+user_table
+    user_id 
+    user_name
+    user_password
+    user_email
+    created_date 
+
+holding_table
+    user_id
+    stock_symbol
+    price_paid 
+    trade_date 
+
+order_table
+    user_id 
+    stock_symbol
+    quantity
+    action 
+    price_type 
+    duration 
+
+Endpoint:
+paper-trading-database.c3n2xfnt9l9e.us-east-2.rds.amazonaws.com
+
+Port: 
+3306
+
+Master Username: 
+admin 
+
+Master Password: 
+ZW*7T%xqnEN;5w38LYUvN4nytM~ftTG9
+
+mysql -h paper-trading-database.c3n2xfnt9l9e.us-east-2.rds.amazonaws.com -P 3306 -u admin -p
