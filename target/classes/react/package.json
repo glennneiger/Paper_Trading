@@ -1,6 +1,7 @@
 {
   "name": "paper-trading-react",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@types/jest": "24.0.18",
