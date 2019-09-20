@@ -4,7 +4,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,7 +26,7 @@ public class UserDAOHibernateImpl implements UserDAO {
 	@Override
 	public List<User> findAll() {
 		Session currentSession = entityManager.unwrap(Session.class);
-		Query<User> userQuery = currentSession.createQuery("From User", User.class);
+		Query<User> userQuery = currentSession.createQuery("FROM User", User.class);
 		List<User> userList = userQuery.getResultList();
 		return userList;
 	}
@@ -36,6 +38,15 @@ public class UserDAOHibernateImpl implements UserDAO {
 		return user;
 	}
 
+	@Override
+	public List<User> findByUserName(String userName) {
+		Session currentSession = entityManager.unwrap(Session.class);
+		Query<User> userQuery = currentSession.createQuery("FROM User user WHERE user.userName =: userName", User.class);
+		userQuery.setParameter("userName", userName);
+		List<User> userList = userQuery.getResultList();
+		return userList;
+	}
+	
 	@Override
 	public void save(User user) {
 		Session currentSession = entityManager.unwrap(Session.class);

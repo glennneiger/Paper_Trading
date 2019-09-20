@@ -56,6 +56,11 @@ public class PapertradingRestController {
 		return user; 
 	}
 	
+	@GetMapping("/user/exist/{userName}")
+	public boolean getUser(@PathVariable String userName) {
+		return userService.userNameExist(userName); 
+	}
+	
 	@GetMapping("/user/holding/{userId}")
 	public List<Holding> getHolding(@PathVariable int userId) {
 		List<Holding> holdings = holdingService.findByUserId(userId);

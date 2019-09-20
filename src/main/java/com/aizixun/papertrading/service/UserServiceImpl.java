@@ -30,6 +30,14 @@ public class UserServiceImpl implements UserService {
 	public User findById(int id) {
 		return userDAO.findById(id);
 	}
+	
+	@Override
+	@Transactional
+	public boolean userNameExist(String userName) {
+		List<User> userList = userDAO.findByUserName(userName);
+		if (userList.size() == 1) return true; 
+		return false; 
+	}
 
 	@Override
 	@Transactional
