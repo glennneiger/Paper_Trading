@@ -45,7 +45,7 @@ public class UserDAOHibernateImpl implements UserDAO {
 	@Override
 	public void deleteById(int id) {
 		Session currentSession = entityManager.unwrap(Session.class);
-		Query<User> userQuery = currentSession.createQuery("delete from User where id=:userId");
+		Query<User> userQuery = currentSession.createQuery("delete from User where id=:userId", User.class);
 		userQuery.setParameter("userId", id);
 		userQuery.executeUpdate();
 	}

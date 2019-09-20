@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.aizixun.papertrading.entity.Holding;
-import com.aizixun.papertrading.entity.User;
+
 
 @Repository
 public class HoldingDAOHibernateImpl implements HoldingDAO {
@@ -29,12 +29,21 @@ public class HoldingDAOHibernateImpl implements HoldingDAO {
 		List<Holding> holdingList = holdingQuery.getResultList();
 		return holdingList;
 	}
-
+	
 	@Override
 	public Holding findById(int id) {
 		Session currentSession = entityManager.unwrap(Session.class);
 		Holding holding = currentSession.get(Holding.class, id);
 		return holding;
+	}
+	
+	@Override
+	public List<Holding> findByUserId(int userId) {
+		Session currentSession = entityManager.unwrap(Session.class);
+		Query<Holding> holdingQuery = currentSession.createQuery("From Holding where userId=:userId", Holding.class);
+		holdingQuery.setParameter("userId", userId);
+		List<Holding> holdingList = holdingQuery.getResultList();
+		return holdingList;
 	}
 
 	@Override
@@ -46,7 +55,7 @@ public class HoldingDAOHibernateImpl implements HoldingDAO {
 	@Override
 	public void deleteById(int id) {
 		Session currentSession = entityManager.unwrap(Session.class);
-		Query<Holding> holdingQuery = currentSession.createQuery("delete from Holding where id=:holdingId");
+		Query<Holding> holdingQuery = currentSession.createQuery("delete from Holding where id=:holdingId", Holding.class);
 		holdingQuery.setParameter("holdingId", id);
 		holdingQuery.executeUpdate();
 	}

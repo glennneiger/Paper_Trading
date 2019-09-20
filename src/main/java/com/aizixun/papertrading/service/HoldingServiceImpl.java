@@ -31,6 +31,12 @@ public class HoldingServiceImpl implements HoldingService {
 	public Holding findById(int id) {
 		return holdingDAO.findById(id);
 	}
+	
+	@Override
+	@Transactional
+	public List<Holding> findByUserId(int userId){
+		return holdingDAO.findByUserId(userId);
+	}
 
 	@Override
 	@Transactional
