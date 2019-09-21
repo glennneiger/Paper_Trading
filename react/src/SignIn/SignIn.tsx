@@ -9,13 +9,18 @@ const useStyles: (props?: any) => Record<any, string> = makeStyles(theme => ({
         height: '100vh',
     },
     image: {
-        backgroundImage: 'url(./img/sign-in.jpg)',
+        backgroundImage: 'url(./img/sign-in.jpeg)',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundPosition: 'left',
+    },
+    brand: {
+        margin: theme.spacing(5, 10),
+        color: '#ffffff',
+        filter: 'brightness(100%)',
     },
     slogan: {
-        margin: theme.spacing(5, 10),
+        margin: theme.spacing(0, 10),
         color: '#ffffff',
         filter: 'brightness(100%)',
     },
@@ -46,8 +51,8 @@ const SignIn: () => JSX.Element = () => {
             <CssBaseline />
             <Grid item xs={false} sm={4} md={7} lg={8} xl={9} className={classes.image} >
                 <Hidden smDown={true}> 
-                    <div> 
-                        <Typography variant="h1" className={classes.slogan}>
+                    <div className={classes.slogan}> 
+                        <Typography variant="h1" className={classes.brand}>
                             Paper Trading
                         </Typography>
                         <Typography variant="h3" className={classes.slogan}>
@@ -99,12 +104,12 @@ const SignIn: () => JSX.Element = () => {
                             className={classes.submit}
                         >
                             Sign In
-              </Button>
+                        </Button>
                         <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
                                     Forgot password?
-                  </Link>
+                                </Link>
                             </Grid>
                             <Grid item>
                                 <Link href="#" variant="body2">
