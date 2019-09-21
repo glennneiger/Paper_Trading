@@ -41,9 +41,16 @@ const useStyles: (props?: any) => Record<any, string> = makeStyles(theme => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    pointer: {
+        cursor: 'pointer',
+    },
 }));
 
-const SignIn: () => JSX.Element = () => {
+interface Props {
+    setPage: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const SignIn: React.FC<Props> = props => {
     const classes = useStyles();
 
     return (
@@ -107,12 +114,19 @@ const SignIn: () => JSX.Element = () => {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2">
+                                <Link 
+                                    variant="body2"
+                                    onClick={() => {props.setPage('forgot-password')}}
+                                >
                                     Forgot password?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link 
+                                    variant="body2" 
+                                    className={classes.pointer} 
+                                    onClick={() => {props.setPage('sign-up')}}
+                                >
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>

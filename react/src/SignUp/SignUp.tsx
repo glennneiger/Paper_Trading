@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography } from '@material-ui/core';
+import { Avatar, Button, CssBaseline, TextField, Link, Paper, Box, Grid, Typography } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles } from '@material-ui/core/styles';
 import Copyright from '../Copyright/Copyright';
@@ -31,9 +31,16 @@ const useStyles: (props?: any) => Record<string, string> = makeStyles(theme => (
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    pointer: {
+        cursor: 'pointer',
+    },
 }));
 
-const SignUp: () => JSX.Element = () => {
+interface Props {
+    setPage: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const SignUp: React.FC<Props> = props => {
     const classes = useStyles();
 
     return (
@@ -97,12 +104,6 @@ const SignUp: () => JSX.Element = () => {
                                     autoComplete="current-password"
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
-                                />
-                            </Grid>
                         </Grid>
                         <Button
                             type="submit"
@@ -115,7 +116,11 @@ const SignUp: () => JSX.Element = () => {
                         </Button>
                         <Grid container justify="flex-end">
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link 
+                                    variant="body2" 
+                                    className={classes.pointer} 
+                                    onClick={() => {props.setPage('sign-in')}}
+                                >
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>
