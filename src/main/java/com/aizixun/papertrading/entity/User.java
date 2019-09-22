@@ -19,8 +19,11 @@ public class User {
 	@Column(name="user_id")
 	private int id;
 	
-	@Column(name="user_name")
-	private String userName;
+	@Column(name="user_first_name")
+	private String userFirstName;
+	
+	@Column(name="user_Last_name")
+	private String userLastName;
 	
 	@Column(name="user_password")
 	private String userPassword;
@@ -41,8 +44,9 @@ public class User {
 	}
 
 
-	public User(String userName, String userPassword, String userEmail, Double cash, Timestamp createdDate) {
-		this.userName = userName;
+	public User(String userFirstName, String userLastName, String userPassword, String userEmail, Double cash, Timestamp createdDate) {
+		this.userFirstName = userFirstName;
+		this.userLastName = userLastName;
 		this.userPassword = userPassword;
 		this.userEmail = userEmail;
 		this.cash = cash;
@@ -52,8 +56,9 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", userName=" + userName + ", userPassword=" + userPassword + ", userEmail="
-				+ userEmail + ", cash=" + cash + ", createdDate=" + createdDate + "]";
+		return "User [id=" + id + ", userFirstName=" + userFirstName + ", userLastName=" + userLastName
+				+ ", userPassword=" + userPassword + ", userEmail=" + userEmail + ", cash=" + cash + ", createdDate="
+				+ createdDate + "]";
 	}
 
 
@@ -67,13 +72,23 @@ public class User {
 	}
 
 
-	public String getUserName() {
-		return userName;
+	public String getUserFirstName() {
+		return userFirstName;
 	}
 
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserFirstName(String userFirstName) {
+		this.userFirstName = userFirstName;
+	}
+
+
+	public String getUserLastName() {
+		return userLastName;
+	}
+
+
+	public void setUserLastName(String userLastName) {
+		this.userLastName = userLastName;
 	}
 
 

@@ -1,10 +1,12 @@
 package com.aizixun.papertrading.rest;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,6 +85,11 @@ public class PapertradingRestController {
 	@GetMapping("/user/email_exist")
 	public boolean userEmailExist(@RequestParam(name = "user_email") String userEmail) {
 		return userService.userEmailExist(userEmail); 
+	}
+	
+	@PostMapping("/user/sign_in")
+	public Map<String, Object> userSignIn(@RequestParam(name = "user_email") String userEmail, @RequestParam(name = "user_password") String userPassword) {
+		return userService.userSignIn(userEmail, userPassword); 
 	}
 
 }

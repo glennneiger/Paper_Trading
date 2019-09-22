@@ -9,7 +9,8 @@ DROP TABLE user_table;
 /* Create Tables */
 CREATE TABLE user_table (
     user_id INT NOT NULL AUTO_INCREMENT UNIQUE,
-    user_name VARCHAR(30) UNIQUE NOT NULL,
+    user_first_name VARCHAR(30) NOT NULL,
+    user_last_name VARCHAR(30) NOT NULL,
     user_password VARCHAR(30) NOT NULL,
     user_email VARCHAR(255) UNIQUE NULL,
     cash DOUBLE(20, 4) NOT NULL,
@@ -28,9 +29,9 @@ CREATE TABLE holding_table (
 );
 
 /* Repopulate Tables */
-INSERT INTO user_table (user_id, user_name, user_password, user_email, cash, created_date) 
-VALUES  (DEFAULT, 'admin', 'admin', 'admin@admin.com', 1000000.00, "2019-08-14T22:18:03.000+0000"),
-        (DEFAULT, 'test', 'test', 'test@admin.com', 1000000.00, "2019-09-12T22:18:03.000+0000");
+INSERT INTO user_table (user_id, user_first_name, user_last_name, user_password, user_email, cash, created_date) 
+VALUES  (DEFAULT, 'Joseff', 'Barron', 'admin', 'admin@admin.com', 1000000.00, "2019-08-14T22:18:03.000+0000"),
+        (DEFAULT, 'Dulimbai', 'Abka', 'test', 'test@admin.com', 1000000.00, "2019-09-12T22:18:03.000+0000");
 
 INSERT INTO holding_table (holding_id, user_id, stock_symbol, price_paid, trade_date)
 VALUES  (DEFAULT, 1, "GOOGL", 1215.45, "2019-08-15T20:18:03.000+0000"),
