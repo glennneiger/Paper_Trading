@@ -48,6 +48,15 @@ public class UserDAOHibernateImpl implements UserDAO {
 	}
 	
 	@Override
+	public List<User> findByUserEmail(String userEmail) {
+		Session currentSession = entityManager.unwrap(Session.class);
+		Query<User> userQuery = currentSession.createQuery("FROM User user WHERE user.userEmail =: userEmail", User.class);
+		userQuery.setParameter("userEmail", userEmail);
+		List<User> userList = userQuery.getResultList();
+		return userList;
+	}
+	
+	@Override
 	public void save(User user) {
 		Session currentSession = entityManager.unwrap(Session.class);
 		currentSession.saveOrUpdate(user);  

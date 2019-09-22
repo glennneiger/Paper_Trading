@@ -8,6 +8,7 @@ public interface UserService {
 	public List<User> findAll();
 	public User findById(int id);
 	public boolean userNameExist(String userName);
+	public boolean userEmailExist(String userEmail);
 	public void save(User user);
 	public void deleteById(int id); 
 }

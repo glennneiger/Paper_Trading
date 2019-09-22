@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aizixun.papertrading.entity.Holding;
@@ -78,7 +79,10 @@ public class PapertradingRestController {
 		return iexCloudService.getStockChart(stockSymbol); 
 	}
 	
-	
-
+	// --------- Official & In Use ----------
+	@GetMapping("/user/email_exist")
+	public boolean userEmailExist(@RequestParam(name = "user_email") String userEmail) {
+		return userService.userEmailExist(userEmail); 
+	}
 
 }

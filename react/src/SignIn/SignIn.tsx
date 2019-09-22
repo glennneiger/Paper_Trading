@@ -52,6 +52,9 @@ interface Props {
 
 const SignIn: React.FC<Props> = props => {
     const classes = useStyles();
+    const [error, setError] = React.useState<string>("");
+
+    const 
 
     return (
         <Grid container component="main" className={classes.root}>

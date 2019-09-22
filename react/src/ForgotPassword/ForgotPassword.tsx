@@ -3,6 +3,8 @@ import { Avatar, Button, CssBaseline, TextField, Link, Container, Box, Grid, Typ
 import LoopIcon from '@material-ui/icons/Loop';
 import { makeStyles } from '@material-ui/core/styles';
 import Copyright from '../Copyright/Copyright';
+import HTTPClient from '../HTTPClient/HTTPClient';
+import { string } from 'prop-types';
 
 const useStyles: (props?: any) => Record<string, string>  = makeStyles(theme => ({
     '@global': {
@@ -34,7 +36,13 @@ interface Props {
 }
 
 const ForgotPassword: React.FC<Props> = (props) => {
-    const classes = useStyles();
+    const classes: Record<string, string> = useStyles();
+    const [email, setEmail]  = React.useState<string>("");
+
+    const submitResetHandler: (event: React.MouseEvent<any>) => void = event => {
+        event.preventDefault();
+        HTTPClient.getUserEmailExist(email).then(result => {console.log(result)}); 
+    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -45,7 +53,7 @@ const ForgotPassword: React.FC<Props> = (props) => {
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Reset password
-        </Typography>
+                </Typography>
                 <form className={classes.form} noValidate>
                     <TextField
                         variant="outlined"
@@ -57,6 +65,7 @@ const ForgotPassword: React.FC<Props> = (props) => {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        onChange={event => setEmail(event.target.value)}
                     />
                     <Button
                         type="submit"
@@ -64,6 +73,7 @@ const ForgotPassword: React.FC<Props> = (props) => {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={submitResetHandler}
                     >
                         Reset
                     </Button>

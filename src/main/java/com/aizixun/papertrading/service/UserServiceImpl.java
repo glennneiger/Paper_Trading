@@ -38,6 +38,14 @@ public class UserServiceImpl implements UserService {
 		if (userList.size() == 1) return true; 
 		return false; 
 	}
+	
+	@Override
+	@Transactional
+	public boolean userEmailExist(String userEmail) {
+		List<User> userList = userDAO.findByUserEmail(userEmail);
+		if (userList.size() == 1) return true; 
+		return false; 
+	}
 
 	@Override
 	@Transactional
