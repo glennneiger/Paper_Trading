@@ -1,13 +1,28 @@
 import React from 'react';
-import { Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, Hidden } from '@material-ui/core';
+import { Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography, Hidden, Snackbar, SnackbarContent, IconButton } from '@material-ui/core';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import CloseIcon from '@material-ui/icons/Close';
+import ErrorIcon from '@material-ui/icons/Error';
 import { makeStyles } from '@material-ui/core/styles';
 import Copyright from '../Copyright/Copyright';
+import HTTPClient from '../HTTPClient/HTTPClient';
 
 const useStyles: (props?: any) => Record<any, string> = makeStyles(theme => ({
     root: {
         height: '100vh',
     },
+    error: {
+        backgroundColor: theme.palette.error.dark,
+    },
+    icon: {
+        fontSize: 20,
+        opacity: 0.9,
+        marginRight: theme.spacing(1),
+    },
+    message: {
+        display: 'flex',
+        alignItems: 'center',
+    }, 
     image: {
         backgroundImage: 'url(./img/sign-in.jpeg)',
         backgroundRepeat: 'no-repeat',
@@ -52,21 +67,64 @@ interface Props {
 
 const SignIn: React.FC<Props> = props => {
     const classes = useStyles();
-    const [error, setError] = React.useState<string>("");
 
-    const 
+    const [inputEmail, setInputEmail] = React.useState<string>('');
+    const [inputPassword, setInputPassword] = React.useState<string>('');
+    const [errorMessage, setErrorMessage] = React.useState<string>('');
+    const [errorOpen, setErrorOpen] = React.useState<boolean>(false);
+
+
+    const signInHandler: (event: React.MouseEvent<any>) => void = async event => {
+        event.preventDefault(); 
+        if (! await HTTPClient.getUserEmailExist(inputEmail)) {
+            setErrorMessage('It appears there\'s no account associated with this email!');
+            setErrorOpen(true);
+        }
+        else if (true) {
+            setErrorMessage('It appears entered password is incorrect');
+            setErrorOpen(true);
+        }
+        else {
+            // Sign in - Cookies all those stuffs 
+        }
+    }
 
     return (
         <Grid container component="main" className={classes.root}>
             <CssBaseline />
+            <Snackbar
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
+                open={errorOpen}
+                autoHideDuration={9000}
+                onClose={() => { setErrorOpen(false) }}
+            >
+                <SnackbarContent
+                    className={classes.error}
+                    message={
+                        <span id="client-snackbar" className={classes.message}>
+                            <ErrorIcon className={classes.icon}
+                            />
+                            {errorMessage}
+                        </span>
+                    }
+                    action={[
+                        <IconButton key="close" aria-label="close" color="inherit" onClick={() => { setErrorOpen(false) }}>
+                            <CloseIcon className={classes.icon} />
+                        </IconButton>,
+                    ]}
+                />
+            </ Snackbar>
             <Grid item xs={false} sm={4} md={7} lg={8} xl={9} className={classes.image} >
-                <Hidden smDown={true}> 
-                    <div className={classes.slogan}> 
+                <Hidden smDown={true}>
+                    <div className={classes.slogan}>
                         <Typography variant="h1" className={classes.brand}>
                             Paper Trading
                         </Typography>
                         <Typography variant="h3" className={classes.slogan}>
-                            A sumptuous stock trading simulator. 
+                            A sumptuous stock trading simulator.
                         </Typography>
                     </div>
                 </Hidden>
@@ -90,6 +148,7 @@ const SignIn: React.FC<Props> = props => {
                             name="email"
                             autoComplete="email"
                             autoFocus
+                            onChange={event => setInputEmail(event.target.value)}
                         />
                         <TextField
                             variant="outlined"
@@ -101,6 +160,7 @@ const SignIn: React.FC<Props> = props => {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            onChange={event => setInputPassword(event.target.value)}
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
@@ -112,23 +172,24 @@ const SignIn: React.FC<Props> = props => {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            onClick={signInHandler}
                         >
                             Sign In
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link 
+                                <Link
                                     variant="body2"
-                                    onClick={() => {props.setPage('forgot-password')}}
+                                    onClick={() => { props.setPage('forgot-password') }}
                                 >
                                     Forgot password?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link 
-                                    variant="body2" 
-                                    className={classes.pointer} 
-                                    onClick={() => {props.setPage('sign-up')}}
+                                <Link
+                                    variant="body2"
+                                    className={classes.pointer}
+                                    onClick={() => { props.setPage('sign-up') }}
                                 >
                                     {"Don't have an account? Sign Up"}
                                 </Link>

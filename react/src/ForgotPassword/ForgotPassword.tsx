@@ -4,7 +4,6 @@ import LoopIcon from '@material-ui/icons/Loop';
 import { makeStyles } from '@material-ui/core/styles';
 import Copyright from '../Copyright/Copyright';
 import HTTPClient from '../HTTPClient/HTTPClient';
-import { string } from 'prop-types';
 
 const useStyles: (props?: any) => Record<string, string>  = makeStyles(theme => ({
     '@global': {
