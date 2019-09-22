@@ -11,6 +11,7 @@ public interface UserService {
 	public boolean userNameExist(String userName);
 	public boolean userEmailExist(String userEmail);
 	public Map<String, Object> userSignIn(String userEmail, String userPassword); 
+	public Map<String, Object> userSignUp(String userFirstName, String userLastName, String userEmail, String userPassword);
 	public void save(User user);
 	public void deleteById(int id); 
 }

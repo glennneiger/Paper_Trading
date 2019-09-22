@@ -91,5 +91,10 @@ public class PapertradingRestController {
 	public Map<String, Object> userSignIn(@RequestParam(name = "user_email") String userEmail, @RequestParam(name = "user_password") String userPassword) {
 		return userService.userSignIn(userEmail, userPassword); 
 	}
+	
+	@PostMapping("/user/sign_up")
+	public Map<String, Object> userSignUp( @RequestParam(name = "user_first_name") String userFirstName, @RequestParam(name = "user_last_name") String userLastName, @RequestParam(name = "user_password") String userPassword, @RequestParam(name = "user_email") String userEmail) {
+		return userService.userSignUp(userFirstName, userLastName, userEmail, userPassword); 
+	}
 
 }

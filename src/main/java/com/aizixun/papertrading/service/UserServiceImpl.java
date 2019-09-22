@@ -1,5 +1,7 @@
 package com.aizixun.papertrading.service;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +15,14 @@ import com.aizixun.papertrading.entity.User;
 
 @Service
 public class UserServiceImpl implements UserService {
+	
+	private final String RESPONSE_SUCCESS = "success";
+	private final String RESPONSE_ID = "id"; 
+	private final String RESPONSE_FIRST_NAME = "first_name";
+	private final String RESPONSE_LAST_NAME = "last_name";
+	private final String RESPONSE_TOKEN = "token"; 
+	
+	private final Double DEFAULT_CASH = 1000000.0;
 	
 	private UserDAO userDAO;
 	private JwtTokenService jwtTokenService; 
@@ -60,13 +70,8 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Map<String, Object> userSignIn(String userEmail, String userPassword) {
-		final String RESPONSE_SUCCESS = "success";
-		final String RESPONSE_ID = "id"; 
-		final String RESPONSE_FIRST_NAME = "first_name";
-		final String RESPONSE_LAST_NAME = "last_name";
-		final String RESPONSE_TOKEN = "token"; 
-		
+	@Transactional
+	public Map<String, Object> userSignIn(String userEmail, String userPassword) {	
 		Map<String, Object> response = new HashMap<String, Object>();
 		User user = checkUserPassword(userEmail, userPassword); 
 		if (user == null) {
@@ -83,6 +88,34 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	
+	private Timestamp getCurrentTimestamp() {
+		Instant now = Instant.now();
+		Timestamp curent = Timestamp.from(now);
+		return curent;
+	}
+	
+	@Override
+	@Transactional
+	public Map<String, Object> userSignUp(String userFirstName, String userLastName, String userEmail, String userPassword) {
+		// TODO - Validating all input fields
+		
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		if (userEmailExist(userEmail)) {
+			response.put(RESPONSE_SUCCESS, false);
+			return response; 
+		}
+		
+		User user = new User(userFirstName, userLastName, userPassword, userEmail, DEFAULT_CASH, getCurrentTimestamp());
+		userDAO.save(user);
+		response.put(RESPONSE_ID, user.getId());
+		response.put(RESPONSE_FIRST_NAME, user.getUserFirstName());
+		response.put(RESPONSE_LAST_NAME, user.getUserLastName());
+		response.put(RESPONSE_TOKEN, jwtTokenService.generateToken(user));
+		return response;
+	}
+	
 	@Override
 	@Transactional
 	public void save(User user) {
