@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,11 @@ public class UserServiceImpl implements UserService {
 	private final String RESPONSE_FIRST_NAME = "first_name";
 	private final String RESPONSE_LAST_NAME = "last_name";
 	private final String RESPONSE_TOKEN = "token"; 
+	
+	private final String PATTERN_FIRST_NAME = "^[a-zA-Z]{1,15}$"; 
+	private final String PATTERN_LAST_NAME = "^[a-zA-Z]{1,15}$"; 
+	private final String PATTERN_EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"; 
+	private final String PATTERN_PASSWORD = "^[a-zA-Z0-9]{5,15}$";
 	
 	private final Double DEFAULT_CASH = 1000000.0;
 	
@@ -73,6 +79,11 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public Map<String, Object> userSignIn(String userEmail, String userPassword) {	
 		Map<String, Object> response = new HashMap<String, Object>();
+		if (!Pattern.compile(PATTERN_EMAIL).matcher(userEmail).matches()
+				|| !Pattern.compile(PATTERN_PASSWORD).matcher(userPassword).matches()) {
+			response.put(RESPONSE_SUCCESS, false);
+			return response; 	
+		}
 		User user = checkUserPassword(userEmail, userPassword); 
 		if (user == null) {
 			response.put(RESPONSE_SUCCESS, false);
@@ -98,15 +109,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public Map<String, Object> userSignUp(String userFirstName, String userLastName, String userEmail, String userPassword) {
-		// TODO - Validating all input fields
-		
 		Map<String, Object> response = new HashMap<String, Object>();
-		
+		if (!Pattern.compile(PATTERN_FIRST_NAME).matcher(userFirstName).matches()
+				|| !Pattern.compile(PATTERN_LAST_NAME).matcher(userLastName).matches()
+				|| !Pattern.compile(PATTERN_EMAIL).matcher(userEmail).matches()
+				|| !Pattern.compile(PATTERN_PASSWORD).matcher(userPassword).matches()) {
+			response.put(RESPONSE_SUCCESS, false);
+			return response; 	
+		}
 		if (userEmailExist(userEmail)) {
 			response.put(RESPONSE_SUCCESS, false);
 			return response; 
 		}
-		
 		User user = new User(userFirstName, userLastName, userPassword, userEmail, DEFAULT_CASH, getCurrentTimestamp());
 		userDAO.save(user);
 		response.put(RESPONSE_SUCCESS, true);
@@ -114,7 +128,6 @@ public class UserServiceImpl implements UserService {
 		response.put(RESPONSE_FIRST_NAME, user.getUserFirstName());
 		response.put(RESPONSE_LAST_NAME, user.getUserLastName());
 		response.put(RESPONSE_TOKEN, jwtTokenService.generateToken(user));
-		
 		return response;
 	}
 	

@@ -99,7 +99,7 @@ public class PapertradingRestController {
 	public Map<String, Object> userSignUp(@RequestBody Map<String, Object> body) {
 		String userFirstName = (String) body.get("user_first_name"); 
 		String userLastName = (String) body.get("user_last_name"); 
-		String userPassword = (String) body.get("user_first_name"); 
+		String userPassword = (String) body.get("user_password"); 
 		String userEmail = (String) body.get("user_email"); 
 		return userService.userSignUp(userFirstName, userLastName, userEmail, userPassword); 
 	}
