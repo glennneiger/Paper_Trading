@@ -6,7 +6,7 @@ import Dashboard from './Dashboard/Dashboard';
 
 const App: React.FC = () => {
 
-    const [page, setPage] = React.useState<string>('sign-in');
+    const [page, setPage] = React.useState<string>('sign-up');
     const [id, setId] = React.useState<number>(0);
     const [token, setToken] = React.useState<string>('');
     const [firstName, setFirstName] = React.useState<string>('');
@@ -25,7 +25,15 @@ const App: React.FC = () => {
                     />
                 ); 
             case 'sign-up':
-                return <SignUp setPage={setPage}/>;
+                return (
+                    <SignUp 
+                        setPage={setPage} 
+                        setId={setId} 
+                        setToken={setToken}
+                        setFirstName={setFirstName}
+                        setLastName={setLastName}
+                    />
+                ); 
             case 'forgot-password':
                 return <ForgotPassword setPage={setPage}/>;
             case 'dashboard':

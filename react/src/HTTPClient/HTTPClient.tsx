@@ -22,4 +22,15 @@ const postUserSignIn: (email: string, password: string) => Promise<any> = (email
         .then(response => {return response.data});
 }
 
-export default {getUserEmailExist, postUserSignIn};
+const postUserSignUp: (firstName: string, lastName: string, email: string, password: string) => Promise<any> = (firstName, lastName, email, password) => {
+    let data = {
+        user_first_name: firstName,
+        user_last_name: lastName,
+        user_email: email,
+        user_password: password, 
+    }
+    return axios.post(API_URL + '/api/user/sign_up', data)
+        .then(response => {return response.data});
+}
+
+export default {getUserEmailExist, postUserSignIn, postUserSignUp};

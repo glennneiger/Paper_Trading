@@ -109,6 +109,7 @@ public class UserServiceImpl implements UserService {
 		
 		User user = new User(userFirstName, userLastName, userPassword, userEmail, DEFAULT_CASH, getCurrentTimestamp());
 		userDAO.save(user);
+		response.put(RESPONSE_SUCCESS, true);
 		response.put(RESPONSE_ID, user.getId());
 		response.put(RESPONSE_FIRST_NAME, user.getUserFirstName());
 		response.put(RESPONSE_LAST_NAME, user.getUserLastName());

@@ -96,7 +96,7 @@ const SignIn: React.FC<Props> = props => {
         else {
             let response: Response = await HTTPClient.postUserSignIn(inputEmail, inputPassword); 
             if (!response.success) {
-                setErrorMessage('It appears entered password is incorrect');
+                setErrorMessage('It appears the entered password is incorrect');
                 setErrorOpen(true);
             }
             else {

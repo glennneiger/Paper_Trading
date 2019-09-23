@@ -101,7 +101,6 @@ public class PapertradingRestController {
 		String userLastName = (String) body.get("user_last_name"); 
 		String userPassword = (String) body.get("user_first_name"); 
 		String userEmail = (String) body.get("user_email"); 
-		
 		return userService.userSignUp(userFirstName, userLastName, userEmail, userPassword); 
 	}
 
