@@ -7,7 +7,10 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Copyright from '../Copyright/Copyright';
 import Menu from './Menu';
-import { thisExpression } from '@babel/types';
+import ComponentBalance from './Component/ComponentBalance';
+import ComponentUSMarket from './Component/ComponentUSMarket';
+import ComponentAccountSnapshot from './Component/ComponentAccountSnapshot';
+
 
 const drawerWidth = 240;
 
@@ -169,15 +172,23 @@ const Dashboard: React.FC<Props> = props => {
                 <Container maxWidth="lg" className={classes.container}>
                     <Grid container spacing={3}>
                         {/* Chart */}
-                        <Grid item xs={12} md={5} lg={4}>
+                        <Grid item xs={12} md={3} lg={3}>
                             <Paper className={fixedHeightPaper}>
-
+                                <ComponentBalance 
+                                    firstName={props.firstName}
+                                    lastName={props.lastName}
+                                />
                             </Paper>
                         </Grid>
                         {/* Recent Deposits */}
-                        <Grid item xs={12} md={7} lg={8}>
+                        <Grid item xs={12} md={4} lg={4}>
                             <Paper className={fixedHeightPaper}>
-
+                                <ComponentAccountSnapshot />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} md={5} lg={5}>
+                            <Paper className={fixedHeightPaper}>
+                                <ComponentUSMarket />
                             </Paper>
                         </Grid>
                         {/* Recent Orders */}

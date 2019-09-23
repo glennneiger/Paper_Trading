@@ -9,8 +9,8 @@ const App: React.FC = () => {
     const [page, setPage] = React.useState<string>('dashboard');
     const [id, setId] = React.useState<number>(0);
     const [token, setToken] = React.useState<string>('');
-    const [firstName, setFirstName] = React.useState<string>('');
-    const [lastName, setLastName] = React.useState<string>('');
+    const [firstName, setFirstName] = React.useState<string>('Humphrey');
+    const [lastName, setLastName] = React.useState<string>('Appleby');
 
     const getPageHandler: () => JSX.Element = () => {
         switch(page) {
