@@ -6,7 +6,7 @@ import Dashboard from './Dashboard/Dashboard';
 
 const App: React.FC = () => {
 
-    const [page, setPage] = React.useState<string>('sign-up');
+    const [page, setPage] = React.useState<string>('dashboard');
     const [id, setId] = React.useState<number>(0);
     const [token, setToken] = React.useState<string>('');
     const [firstName, setFirstName] = React.useState<string>('');

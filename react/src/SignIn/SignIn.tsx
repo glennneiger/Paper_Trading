@@ -24,7 +24,7 @@ const useStyles: (props?: any) => Record<any, string> = makeStyles(theme => ({
         alignItems: 'center',
     }, 
     image: {
-        backgroundImage: 'url(./img/sign-in.jpeg)',
+        backgroundImage: 'url(./img/sign-in.jpg)',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundPosition: 'left',
