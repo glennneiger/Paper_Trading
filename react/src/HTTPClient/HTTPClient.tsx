@@ -14,14 +14,12 @@ const getUserEmailExist: (email: string) => Promise<any> = (email) => {
 }
 
 const postUserSignIn: (email: string, password: string) => Promise<any> = (email, password) => {
-    let params = {
-        params: {
-            user_email: email,
-            user_password: password, 
-        }
+    let data = {
+        user_email: email,
+        user_password: password, 
     }
-    return axios.post(API_URL + '/api/user/sign_in', params)
+    return axios.post(API_URL + '/api/user/sign_in', data)
         .then(response => {return response.data});
 }
 
-export default {getUserEmailExist};
+export default {getUserEmailExist, postUserSignIn};

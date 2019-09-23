@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -88,12 +89,19 @@ public class PapertradingRestController {
 	}
 	
 	@PostMapping("/user/sign_in")
-	public Map<String, Object> userSignIn(@RequestParam(name = "user_email") String userEmail, @RequestParam(name = "user_password") String userPassword) {
+	public Map<String, Object> userSignIn(@RequestBody Map<String, Object> body) {
+		String userEmail = (String) body.get("user_email"); 
+		String userPassword = (String) body.get("user_password"); 
 		return userService.userSignIn(userEmail, userPassword); 
 	}
 	
 	@PostMapping("/user/sign_up")
-	public Map<String, Object> userSignUp( @RequestParam(name = "user_first_name") String userFirstName, @RequestParam(name = "user_last_name") String userLastName, @RequestParam(name = "user_password") String userPassword, @RequestParam(name = "user_email") String userEmail) {
+	public Map<String, Object> userSignUp(@RequestBody Map<String, Object> body) {
+		String userFirstName = (String) body.get("user_first_name"); 
+		String userLastName = (String) body.get("user_last_name"); 
+		String userPassword = (String) body.get("user_first_name"); 
+		String userEmail = (String) body.get("user_email"); 
+		
 		return userService.userSignUp(userFirstName, userLastName, userEmail, userPassword); 
 	}
 

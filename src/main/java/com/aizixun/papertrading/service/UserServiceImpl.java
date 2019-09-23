@@ -113,6 +113,7 @@ public class UserServiceImpl implements UserService {
 		response.put(RESPONSE_FIRST_NAME, user.getUserFirstName());
 		response.put(RESPONSE_LAST_NAME, user.getUserLastName());
 		response.put(RESPONSE_TOKEN, jwtTokenService.generateToken(user));
+		
 		return response;
 	}
 	

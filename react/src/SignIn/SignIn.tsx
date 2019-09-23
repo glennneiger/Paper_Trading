@@ -63,6 +63,10 @@ const useStyles: (props?: any) => Record<any, string> = makeStyles(theme => ({
 
 interface Props {
     setPage: React.Dispatch<React.SetStateAction<string>>;
+    setId: React.Dispatch<React.SetStateAction<number>>;
+    setToken: React.Dispatch<React.SetStateAction<string>>;
+    setFirstName: React.Dispatch<React.SetStateAction<string>>;
+    setLastName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SignIn: React.FC<Props> = props => {
@@ -76,16 +80,32 @@ const SignIn: React.FC<Props> = props => {
 
     const signInHandler: (event: React.MouseEvent<any>) => void = async event => {
         event.preventDefault(); 
+
+        interface Response {
+            success: boolean,
+            id: number, 
+            first_name: string, 
+            last_name: string,
+            token: string, 
+        }
+
         if (! await HTTPClient.getUserEmailExist(inputEmail)) {
             setErrorMessage('It appears there\'s no account associated with this email!');
             setErrorOpen(true);
         }
-        else if (true) {
-            setErrorMessage('It appears entered password is incorrect');
-            setErrorOpen(true);
-        }
         else {
-            // Sign in - Cookies all those stuffs 
+            let response: Response = await HTTPClient.postUserSignIn(inputEmail, inputPassword); 
+            if (!response.success) {
+                setErrorMessage('It appears entered password is incorrect');
+                setErrorOpen(true);
+            }
+            else {
+                props.setId(response.id);
+                props.setFirstName(response.first_name);
+                props.setLastName(response.last_name);
+                props.setToken(response.token);
+                props.setPage('dashboard');
+            }
         }
     }
 
