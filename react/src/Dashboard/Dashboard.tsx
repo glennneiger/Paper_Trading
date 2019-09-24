@@ -10,6 +10,7 @@ import Menu from './Menu';
 import ComponentBalance from './Component/ComponentBalance';
 import ComponentUSMarket from './Component/ComponentUSMarket';
 import ComponentAccountSnapshot from './Component/ComponentAccountSnapshot';
+import ComponentUSMarketChart from './Component/ComponentUSMarketChart';
 
 
 const drawerWidth = 240;
@@ -97,7 +98,7 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
     },
     fixedHeight: {
-        height: 240,
+        height: 350,
     },
 }));
 
@@ -172,7 +173,7 @@ const Dashboard: React.FC<Props> = props => {
                 <Container maxWidth="lg" className={classes.container}>
                     <Grid container spacing={3}>
                         {/* Chart */}
-                        <Grid item xs={12} md={3} lg={3}>
+                        <Grid item xs={12} md={4} lg={4}>
                             <Paper className={fixedHeightPaper}>
                                 <ComponentBalance 
                                     firstName={props.firstName}
@@ -181,20 +182,20 @@ const Dashboard: React.FC<Props> = props => {
                             </Paper>
                         </Grid>
                         {/* Recent Deposits */}
-                        <Grid item xs={12} md={4} lg={4}>
+                        <Grid item xs={12} md={8} lg={8}>
                             <Paper className={fixedHeightPaper}>
                                 <ComponentAccountSnapshot />
                             </Paper>
                         </Grid>
-                        <Grid item xs={12} md={5} lg={5}>
+                        <Grid item xs={12} md={8} lg={8}>
                             <Paper className={fixedHeightPaper}>
-                                <ComponentUSMarket />
+                                <ComponentUSMarketChart />
                             </Paper>
                         </Grid>
                         {/* Recent Orders */}
-                        <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-
+                        <Grid item xs={12} md={4} lg={4}>
+                            <Paper className={fixedHeightPaper}>
+                                <ComponentUSMarket />
                             </Paper>
                         </Grid>
                     </Grid>
