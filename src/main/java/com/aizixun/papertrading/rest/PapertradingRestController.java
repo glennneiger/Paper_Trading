@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.aizixun.papertrading.entity.Holding;
 import com.aizixun.papertrading.entity.User;
+import com.aizixun.papertrading.model.Portfolio;
 import com.aizixun.papertrading.model.StockChartElement;
 import com.aizixun.papertrading.model.StockQuote;
 import com.aizixun.papertrading.service.HoldingService;
@@ -21,6 +22,7 @@ import com.aizixun.papertrading.service.IEXCloudService;
 import com.aizixun.papertrading.service.UserService;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api")
@@ -73,7 +75,7 @@ public class PapertradingRestController {
 	}
 	
 	@GetMapping("/stock/quote/{stockSymbol}")
-	public Flux<StockQuote> getStockQuote(@PathVariable String stockSymbol) {
+	public Mono<StockQuote> getStockQuote(@PathVariable String stockSymbol) {
 		return iexCloudService.getStockQuote(stockSymbol); 
 	}
 	
@@ -86,6 +88,20 @@ public class PapertradingRestController {
 	@GetMapping("/user/email_exist")
 	public boolean userEmailExist(@RequestParam(name = "user_email") String userEmail) {
 		return userService.userEmailExist(userEmail); 
+	}
+	
+	@GetMapping("/user/portfolio")
+	public Map<String, Object> getUserPortfolio(@RequestParam(name = "token") String token) {
+		return userService.findPortfolioByToken(token); 
+	}
+	
+	@PostMapping("/user/order")
+	public Map<String, Object> userOrder(@RequestBody Map<String, Object> body) {
+		String token = (String) body.get("token"); 
+		String symbol = (String) body.get("symbol"); 
+		int quantity = (int) body.get("quantity");
+		boolean sale = (boolean) body.get("sale"); 
+		return userService.userOrder(token, symbol, quantity, sale); 
 	}
 	
 	@PostMapping("/user/sign_in")
@@ -103,5 +119,7 @@ public class PapertradingRestController {
 		String userEmail = (String) body.get("user_email"); 
 		return userService.userSignUp(userFirstName, userLastName, userEmail, userPassword); 
 	}
+	
+	
 
 }

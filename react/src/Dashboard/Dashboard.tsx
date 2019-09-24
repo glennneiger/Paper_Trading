@@ -5,12 +5,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import Copyright from '../Copyright/Copyright';
 import Menu from './Menu';
-import ComponentBalance from './Component/ComponentBalance';
-import ComponentUSMarket from './Component/ComponentUSMarket';
-import ComponentAccountSnapshot from './Component/ComponentAccountSnapshot';
-import ComponentUSMarketChart from './Component/ComponentUSMarketChart';
+import WindowDashboard from './Windows/WindowDashboard';
+import WindowPortfolio from './Windows/WindowPortfolio';
 
 
 const drawerWidth = 240;
@@ -114,20 +111,77 @@ interface Props {
 const Dashboard: React.FC<Props> = props => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
+    const [window, setWindow] = React.useState('portfolio');
+
+    const appBarTitleSelectionHandler: () => string = () => {
+        switch (window) {
+            case 'dashboard':
+                return ('Dashboard');
+            case 'portfolio':
+                return ('Portfolio');
+            case 'quote':
+                return ('Stock Quote');
+            case 'trade':
+                return ('Trade');
+            case 'order':
+                return ('Current Orders');
+            case 'transaction':
+                return ('Past Transactions');
+            default:
+                return ('Dashboard');
+        }
+    }
+
+    const windowSelectionHandler = () => {
+        switch (window) {
+            case 'dashboard':
+                return (
+                    <WindowDashboard
+                        setPage={props.setPage}
+                        id={props.id}
+                        token={props.token}
+                        firstName={props.firstName}
+                        lastName={props.lastName}
+                    />
+                );
+            case 'portfolio':
+                return (
+                    <WindowPortfolio
+                        setPage={props.setPage}
+                        id={props.id}
+                        token={props.token}
+                        firstName={props.firstName}
+                        lastName={props.lastName}
+                    />
+                );
+            default:
+                return (
+                    <WindowDashboard
+                        setPage={props.setPage}
+                        id={props.id}
+                        token={props.token}
+                        firstName={props.firstName}
+                        lastName={props.lastName}
+                    />
+                );
+        };
+    };
+
+
     const handleDrawerOpen = () => {
-      setOpen(true);
+        setOpen(true);
     };
     const handleDrawerClose = () => {
-      setOpen(false);
+        setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <AppBar 
+            <AppBar
                 color="inherit"
-                position="absolute" 
+                position="absolute"
                 className={clsx(classes.appBar, open && classes.appBarShift)}
             >
                 <Toolbar className={classes.toolbar}>
@@ -141,7 +195,7 @@ const Dashboard: React.FC<Props> = props => {
                         <MenuIcon />
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Dashboard
+                        {appBarTitleSelectionHandler()}
                     </Typography>
                     <IconButton color="inherit">
                         <Badge badgeContent={4} color="secondary">
@@ -164,44 +218,13 @@ const Dashboard: React.FC<Props> = props => {
                 </div>
                 <Divider />
                 <List>
-                    <Menu />
+                    <Menu
+                        setWindow={setWindow}
+                    />
                 </List>
                 <Divider />
             </Drawer>
-            <main className={classes.content}>
-                <div className={classes.appBarSpacer} />
-                <Container maxWidth="lg" className={classes.container}>
-                    <Grid container spacing={3}>
-                        {/* Chart */}
-                        <Grid item xs={12} md={4} lg={4}>
-                            <Paper className={fixedHeightPaper}>
-                                <ComponentBalance 
-                                    firstName={props.firstName}
-                                    lastName={props.lastName}
-                                />
-                            </Paper>
-                        </Grid>
-                        {/* Recent Deposits */}
-                        <Grid item xs={12} md={8} lg={8}>
-                            <Paper className={fixedHeightPaper}>
-                                <ComponentAccountSnapshot />
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} md={8} lg={8}>
-                            <Paper className={fixedHeightPaper}>
-                                <ComponentUSMarketChart />
-                            </Paper>
-                        </Grid>
-                        {/* Recent Orders */}
-                        <Grid item xs={12} md={4} lg={4}>
-                            <Paper className={fixedHeightPaper}>
-                                <ComponentUSMarket />
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                </Container>
-                <Copyright />
-            </main>
+            {windowSelectionHandler()}
         </div>
     );
 }

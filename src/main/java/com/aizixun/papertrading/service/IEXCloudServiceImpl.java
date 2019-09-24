@@ -8,6 +8,7 @@ import com.aizixun.papertrading.model.StockChartElement;
 import com.aizixun.papertrading.model.StockQuote;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 @Service 
@@ -25,12 +26,13 @@ public class IEXCloudServiceImpl implements IEXCloudService {
 		this.webClient = WebClient.builder().baseUrl(url).build();
 	}
 	
-	public Flux<StockQuote> getStockQuote(String stockSymbol) {
+	public Mono<StockQuote> getStockQuote(String stockSymbol) {
 		String uri = url +  "/stock/" + stockSymbol + "/quote?token=" + token; 
 		return webClient.get()
                 		.uri(uri)
-                		.exchange()
-                		.flatMapMany(clientResponse -> clientResponse.bodyToFlux(StockQuote.class));
+                		.retrieve()
+                		.bodyToMono(StockQuote.class);
+
                 		
 	}
 	

@@ -13,15 +13,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.aizixun.papertrading.dao.UserDAO;
 import com.aizixun.papertrading.entity.User;
+import com.aizixun.papertrading.model.Portfolio;
+import com.aizixun.papertrading.model.StockQuote;
 
 @Service
 public class UserServiceImpl implements UserService {
 	
 	private final String RESPONSE_SUCCESS = "success";
+	private final String RESPONSE_FAIL_REASON = "cause";
 	private final String RESPONSE_ID = "id"; 
 	private final String RESPONSE_FIRST_NAME = "first_name";
 	private final String RESPONSE_LAST_NAME = "last_name";
 	private final String RESPONSE_TOKEN = "token"; 
+	private final String RESPONSE_PORTFOLIO = "portfolio";
 	
 	private final String PATTERN_FIRST_NAME = "^[a-zA-Z]{1,15}$"; 
 	private final String PATTERN_LAST_NAME = "^[a-zA-Z]{1,15}$"; 
@@ -32,11 +36,15 @@ public class UserServiceImpl implements UserService {
 	
 	private UserDAO userDAO;
 	private JwtTokenService jwtTokenService; 
+	private HoldingService holdingService;
+	private IEXCloudService iexCloudService;
 	
 	@Autowired
-	public UserServiceImpl(UserDAO userDAO, JwtTokenService jwtTokenService) {
+	public UserServiceImpl(UserDAO userDAO, JwtTokenService jwtTokenService, HoldingService holdingService, IEXCloudService iexCloudService) {
 		this.userDAO = userDAO; 
 		this.jwtTokenService = jwtTokenService; 
+		this.holdingService = holdingService;
+		this.iexCloudService = iexCloudService;
 	}
 
 	@Override
@@ -50,6 +58,23 @@ public class UserServiceImpl implements UserService {
 	public User findById(int id) {
 		return userDAO.findById(id);
 	}
+	
+	@Override
+	@Transactional
+	public Map<String, Object> findPortfolioByToken(String token) {
+		Map<String, Object> response = new HashMap<String, Object>();
+		int id = jwtTokenService.getUserIdFromToken(token);
+		
+		if (id == 0) {
+			response.put(RESPONSE_SUCCESS, false); 
+		} 
+		else {
+			response.put(RESPONSE_SUCCESS, true); 
+			response.put(RESPONSE_PORTFOLIO, new Portfolio(id, iexCloudService, this, holdingService)); 
+		}
+		return response; 
+	}
+	
 	
 	@Override
 	@Transactional
@@ -129,6 +154,35 @@ public class UserServiceImpl implements UserService {
 		response.put(RESPONSE_LAST_NAME, user.getUserLastName());
 		response.put(RESPONSE_TOKEN, jwtTokenService.generateToken(user));
 		return response;
+	}
+	
+	@Override
+	@Transactional
+	public Map<String, Object> userOrder(String token, String symbol, int quantity, boolean sale) {
+		Map<String, Object> response = new HashMap<String, Object>();
+		int id = jwtTokenService.getUserIdFromToken(token);
+		
+		if (id == 0) {
+			response.put(RESPONSE_SUCCESS, false); 
+			response.put(RESPONSE_FAIL_REASON, "invalid-token");
+			return response; 
+		} 
+		
+		// TODO -- deal with invalid symbol 
+		
+		User user = findById(id);
+		StockQuote stockQuote = iexCloudService.getStockQuote(symbol).block(); 
+				
+		double totalPrice = stockQuote.getLatestPrice() * quantity; 
+		if (!sale && totalPrice > user.getCash()) {
+			response.put(RESPONSE_SUCCESS, false); 
+			response.put(RESPONSE_FAIL_REASON, "insufficient-funds");
+			return response; 
+		}
+		
+		// TODO
+		
+		return null; 
 	}
 	
 	@Override

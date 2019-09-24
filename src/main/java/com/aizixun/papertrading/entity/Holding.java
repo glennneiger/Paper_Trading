@@ -26,7 +26,10 @@ public class Holding {
 	private String stockSymbol;
 	
 	@Column(name="price_paid")
-	private String pricePaid;
+	private double pricePaid;
+	
+	@Column(name="quantity")
+	private int quantity; 
 	
 	@Column(name="trade_date")
 	private Timestamp tradeDate; 
@@ -35,18 +38,19 @@ public class Holding {
 		
 	}
 	
-	public Holding(int id, int userId, String stockSymbol, String pricePaid, Timestamp tradeDate) {
+	public Holding(int id, int userId, String stockSymbol, double pricePaid, int quantity, Timestamp tradeDate) {
 		this.id = id;
 		this.userId = userId;
 		this.stockSymbol = stockSymbol;
 		this.pricePaid = pricePaid;
+		this.quantity = quantity; 
 		this.tradeDate = tradeDate;
 	}
 
 	@Override
 	public String toString() {
 		return "Holding [id=" + id + ", userId=" + userId + ", stockSymbol=" + stockSymbol + ", pricePaid=" + pricePaid
-				+ ", tradeDate=" + tradeDate + "]";
+				+ ", quantity=" + quantity + ", tradeDate=" + tradeDate + "]";
 	}
 
 	public int getId() {
@@ -73,12 +77,20 @@ public class Holding {
 		this.stockSymbol = stockSymbol;
 	}
 
-	public String getPricePaid() {
+	public double getPricePaid() {
 		return pricePaid;
 	}
 
-	public void setPricePaid(String pricePaid) {
+	public void setPricePaid(double pricePaid) {
 		this.pricePaid = pricePaid;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	public Timestamp getTradeDate() {
@@ -88,5 +100,4 @@ public class Holding {
 	public void setTradeDate(Timestamp tradeDate) {
 		this.tradeDate = tradeDate;
 	}
-
 }

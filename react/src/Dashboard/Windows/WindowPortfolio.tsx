@@ -7,6 +7,7 @@ import ComponentBalance from '../Component/ComponentBalance';
 import ComponentUSMarket from '../Component/ComponentUSMarket';
 import ComponentAccountSnapshot from '../Component/ComponentAccountSnapshot';
 import ComponentUSMarketChart from '../Component/ComponentUSMarketChart';
+import ComponentPortfolio from '../Component/ComponentPortfolio';
 
 const useStyles = makeStyles(theme => ({
 
@@ -39,7 +40,7 @@ interface Props {
     lastName: string;
 }
 
-const WindowDashboard: React.FC<Props> = props => {
+const WindowPortfolio: React.FC<Props> = props => {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -48,27 +49,9 @@ const WindowDashboard: React.FC<Props> = props => {
             <div className={classes.appBarSpacer} />
             <Container maxWidth="lg" className={classes.container}>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} md={4} lg={4}>
+                    <Grid item xs={12}>
                         <Paper className={fixedHeightPaper}>
-                            <ComponentBalance
-                                firstName={props.firstName}
-                                lastName={props.lastName}
-                            />
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12} md={8} lg={8}>
-                        <Paper className={fixedHeightPaper}>
-                            <ComponentAccountSnapshot />
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12} md={8} lg={8}>
-                        <Paper className={fixedHeightPaper}>
-                            <ComponentUSMarketChart />
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12} md={4} lg={4}>
-                        <Paper className={fixedHeightPaper}>
-                            <ComponentUSMarket />
+                            <ComponentPortfolio />
                         </Paper>
                     </Grid>
                 </Grid>
@@ -78,4 +61,4 @@ const WindowDashboard: React.FC<Props> = props => {
     );
 }
 
-export default WindowDashboard; 
+export default WindowPortfolio; 

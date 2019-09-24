@@ -4,9 +4,10 @@ import com.aizixun.papertrading.model.StockChartElement;
 import com.aizixun.papertrading.model.StockQuote;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface IEXCloudService {
-	public Flux<StockQuote> getStockQuote(String stockSymbol);
+	public Mono<StockQuote> getStockQuote(String stockSymbol);
 	public Flux<StockChartElement> getStockChart(String stockSymbol);
 	public String getStockDataString(String stockSymbol);
 }

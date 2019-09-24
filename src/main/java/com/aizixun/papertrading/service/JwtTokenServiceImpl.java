@@ -62,8 +62,24 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
 	@Override
 	public String getUserEmailFromToken(String token) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Claims claims = getClaimsFromToken(token);
+			return claims.get(CLAIM_KEY_EMAIL, String.class); 
+		}
+		catch (Exception e) {
+			return null; 
+		}
+	}
+	
+	@Override
+	public int getUserIdFromToken(String token) {
+		try {
+			Claims claims = getClaimsFromToken(token);
+			return claims.get(CLAIM_KEY_USER_ID, Integer.class); 
+		}
+		catch (Exception e) {
+			return 0; 
+		}
 	}
 
 	@Override
@@ -104,5 +120,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 		// TODO 
 		return false;
 	}
+
+
 
 }

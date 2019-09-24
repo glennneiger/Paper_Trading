@@ -17,43 +17,47 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Menu: React.FC = () => {
+interface Props {
+    setWindow: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const Menu: React.FC<Props> = props => {
     const classes = useStyles();
 
     return (
         <div>
             <div>
-                <ListItem button>
+                <ListItem button onClick={() => {props.setWindow('dashboard')}}>
                     <ListItemIcon className={classes.listItemIcon}>
                         <DashboardIcon />
                     </ListItemIcon>
                     <ListItemText primary="Dashboard" className={classes.listItemText} />
                 </ListItem>
-                <ListItem button>
+                <ListItem button onClick={() => {props.setWindow('portfolio')}}>
                     <ListItemIcon className={classes.listItemIcon}>
                         <FormatListBulletedIcon />
                     </ListItemIcon>
                     <ListItemText primary="Portfolio" className={classes.listItemText} />
                 </ListItem>
-                <ListItem button>
+                <ListItem button onClick={() => {props.setWindow('quote')}}>
                     <ListItemIcon className={classes.listItemIcon}>
                         <MessageIcon />
                     </ListItemIcon>
                     <ListItemText primary="Quote" className={classes.listItemText} />
                 </ListItem>
-                <ListItem button>
+                <ListItem button onClick={() => {props.setWindow('trade')}}>
                     <ListItemIcon className={classes.listItemIcon}>
                         <InputIcon />
                     </ListItemIcon>
                     <ListItemText primary="Trade" className={classes.listItemText} />
                 </ListItem>
-                <ListItem button>
+                <ListItem button onClick={() => {props.setWindow('order')}}>
                     <ListItemIcon className={classes.listItemIcon}>
                         <PlaylistAddIcon />
                     </ListItemIcon>
                     <ListItemText primary="Order" className={classes.listItemText} />
                 </ListItem>
-                <ListItem button>
+                <ListItem button onClick={() => {props.setWindow('transaction')}}>
                     <ListItemIcon className={classes.listItemIcon}>
                         <PlaylistAddCheckIcon />
                     </ListItemIcon>
