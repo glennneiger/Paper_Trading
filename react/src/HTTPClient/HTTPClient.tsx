@@ -13,6 +13,16 @@ const getUserEmailExist: (email: string) => Promise<any> = (email) => {
         .then(response => {return response.data});
 }
 
+const getUserPortfolio: (token: string) => Promise<any> = (token) => {
+    let params = {
+        params: {
+            token: token, 
+        }
+    }
+    return axios.get(API_URL + '/api/user/portfolio', params)
+        .then(response => {return response.data});
+}
+
 const postUserSignIn: (email: string, password: string) => Promise<any> = (email, password) => {
     let data = {
         user_email: email,
@@ -33,4 +43,4 @@ const postUserSignUp: (firstName: string, lastName: string, email: string, passw
         .then(response => {return response.data});
 }
 
-export default {getUserEmailExist, postUserSignIn, postUserSignUp};
+export default {getUserEmailExist, getUserPortfolio, postUserSignIn, postUserSignUp};

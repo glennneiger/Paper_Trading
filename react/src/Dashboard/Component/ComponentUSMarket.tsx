@@ -21,8 +21,8 @@ interface Data {
 
 const rows: Data[] = [
     {id: 0, symbol: 'DOW', lastPrice: 100, change: 1, changePercentage: 1},
-    {id: 0, symbol: 'NASDAQ', lastPrice: 100, change: 1, changePercentage: 1},
-    {id: 0, symbol: 'S&P 500', lastPrice: 100, change: 1, changePercentage: 1},
+    {id: 1, symbol: 'NASDAQ', lastPrice: 100, change: 1, changePercentage: 1},
+    {id: 2, symbol: 'S&P 500', lastPrice: 100, change: 1, changePercentage: 1},
 ];
 
 

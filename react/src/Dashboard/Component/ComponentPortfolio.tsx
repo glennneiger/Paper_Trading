@@ -1,91 +1,82 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import HTTPClient from '../../HTTPClient/HTTPClient';
 
-/* -- TODO -- */ 
+interface Props {
+    setWindow: React.Dispatch<React.SetStateAction<string>>;
+    token: string;
+}
 
+const useStyles: (props?: any) => Record<any, string> = makeStyles(theme => ({
+    seeMore: {
+        marginTop: theme.spacing(3),
+    },
+    valueUp: {
+        color: '#43A047',
+    },
+    valueDown: {
+        color: '#FF0000',
+    },
+}));
 
-/* -- 
-Symbol, Last Price, Change $, Change %, Qty #, 
-Price Paid $, Day's Gain $, Total Gain $, Total Gain %, Value 
--- */ 
-
-interface Data {
-    id: number;
+interface PortfolioHolding {
     symbol: string;
     lastPrice: number;
     change: number;
     changePercentage: number;
-    quantity: number; 
-    pricePaid: number; 
+    quantity: number;
+    pricePaid: number;
     dayGain: number;
     totalGain: number;
-    totalGainPercentage: number;  
-    value: number; 
+    totalGainPercentage: number;
+    value: number;
 }
 
-const rows: Data[] = [
-    {
-        id: 0, 
-        symbol: 'QQQ', 
-        lastPrice: 190.50, 
-        change: 0, 
-        changePercentage: 0, 
-        quantity: 600, 
-        pricePaid: 164.5495,     
-        dayGain: 0.00,
-        totalGain: 15556.38, 
-        totalGainPercentage: 15.75,
-        value: 114300, 
-    },
-    {
-        id: 1, 
-        symbol: 'LQMT', 
-        lastPrice: 0.0956, 
-        change: 0, 
-        changePercentage: 0, 
-        quantity: 600000, 
-        pricePaid: 0.11233,     
-        dayGain: 0.00,
-        totalGain: -10067.23, 
-        totalGainPercentage: -14.93,
-        value: 57360, 
-    },
-    {
-        id: 2, 
-        symbol: 'DIA', 
-        lastPrice: 269.36, 
-        change: 0, 
-        changePercentage: 0, 
-        quantity: 200, 
-        pricePaid: 231.3943,     
-        dayGain: 0.00,
-        totalGain: 7586.19, 
-        totalGainPercentage: 16.39,
-        value: 53820, 
-    },
-];
+interface Portfolio {
+    success: boolean;
+    portfolio: {
+        userId: number;
+        firstName: string;
+        lastName: string;
+        cash: number;
+        netAssets: number;
+        totalGain: number;
+        portfolioHolding: PortfolioHolding[];
+    }
+}
 
-const useStyles: (props?: any) => Record<any, string>  = makeStyles(theme => ({
-    seeMore: {
-        marginTop: theme.spacing(3),
-    },
-}));
+const toCommas: (value: string) => string = (value) => {
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
-
-const ComponentPortfolio: React.FC = () => {
+const ComponentPortfolio: React.FC<Props> = props => {
     const classes = useStyles();
+    const [portfolio, setPortfolio] = React.useState<Portfolio | null>(null);
+
+    React.useEffect(() => {
+        HTTPClient
+            .getUserPortfolio(props.token)
+            .then(response => setPortfolio(response));
+    }, []);
+
+    let portfolioHoldingItems: PortfolioHolding[] = [];
+    let name = '';
+    if (portfolio !== null) {
+        name = portfolio.portfolio.firstName + ' ' + portfolio.portfolio.lastName + '\'s ';
+        portfolioHoldingItems = portfolio.portfolio.portfolioHolding;
+    }
 
     return (
         <React.Fragment>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                Portfolio
+                {name}Portfolio
             </Typography>
             <Table size="small">
                 <TableHead>
                     <TableRow>
                         <TableCell>Symbol</TableCell>
-                        <TableCell align="right">Last Price</TableCell>
+                        <TableCell align="right">Last Price $</TableCell>
                         <TableCell align="right">Change $</TableCell>
                         <TableCell align="right">Change %</TableCell>
                         <TableCell align="right">Qty #</TableCell>
@@ -93,22 +84,39 @@ const ComponentPortfolio: React.FC = () => {
                         <TableCell align="right">Day's Gain $</TableCell>
                         <TableCell align="right">Total Gain $</TableCell>
                         <TableCell align="right">Total Gain %</TableCell>
-                        <TableCell align="right">Value</TableCell>
+                        <TableCell align="right">Value $</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map(row => (
-                        <TableRow key={row.id}>
-                            <TableCell>{row.symbol}</TableCell>
-                            <TableCell align="right">{row.lastPrice}</TableCell>
-                            <TableCell align="right">{row.change}</TableCell>
-                            <TableCell align="right">{row.changePercentage}</TableCell>
-                            <TableCell align="right">{row.quantity}</TableCell>
-                            <TableCell align="right">{row.pricePaid}</TableCell>
-                            <TableCell align="right">{row.dayGain}</TableCell>
-                            <TableCell align="right">{row.totalGain}</TableCell>
-                            <TableCell align="right">{row.totalGainPercentage}</TableCell>
-                            <TableCell align="right">{row.value}</TableCell>
+                    {portfolioHoldingItems.map(holding => (
+                        <TableRow key={holding.symbol}>
+                            <TableCell>{holding.symbol}</TableCell>
+                            <TableCell align="right">
+                                {toCommas(holding.lastPrice.toFixed(2))}
+                            </TableCell>
+                            <TableCell align="right" className={holding.change > 0 ? classes.valueUp : classes.valueDown}>
+                                {toCommas(Math.abs(holding.change).toFixed(2))}
+                            </TableCell>
+                            <TableCell align="right" className={holding.changePercentage > 0 ? classes.valueUp : classes.valueDown}>
+                                {toCommas(Math.abs(holding.changePercentage).toFixed(2))}%
+                            </TableCell>
+                            <TableCell align="right">
+                                {toCommas(holding.quantity.toFixed(0))}
+                            </TableCell>
+                            <TableCell align="right">
+                                {toCommas(holding.pricePaid.toFixed(2))}</TableCell>
+                            <TableCell align="right" className={holding.dayGain > 0 ? classes.valueUp : classes.valueDown}>
+                                {toCommas(Math.abs(holding.dayGain).toFixed(2))}
+                            </TableCell>
+                            <TableCell align="right" className={holding.totalGain > 0 ? classes.valueUp : classes.valueDown}>
+                                {toCommas(Math.abs(holding.totalGain).toFixed(2))}
+                            </TableCell>
+                            <TableCell align="right" className={holding.totalGainPercentage > 0 ? classes.valueUp : classes.valueDown}>
+                                {toCommas(Math.abs(holding.totalGainPercentage).toFixed(2))}%
+                            </TableCell>
+                            <TableCell align="right">
+                                {toCommas(holding.value.toFixed(2))}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

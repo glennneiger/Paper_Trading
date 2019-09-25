@@ -33,16 +33,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-    setPage: React.Dispatch<React.SetStateAction<string>>;
-    id: number;
+    setWindow: React.Dispatch<React.SetStateAction<string>>;
     token: string;
-    firstName: string;
-    lastName: string;
 }
 
 const WindowPortfolio: React.FC<Props> = props => {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+    console.log("Window Portfolio - Render")
 
     return (
         <main className={classes.content}>
@@ -51,7 +50,10 @@ const WindowPortfolio: React.FC<Props> = props => {
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Paper className={fixedHeightPaper}>
-                            <ComponentPortfolio />
+                            <ComponentPortfolio
+                                setWindow={props.setWindow}
+                                token={props.token}
+                            />
                         </Paper>
                     </Grid>
                 </Grid>

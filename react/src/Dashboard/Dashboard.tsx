@@ -113,6 +113,8 @@ const Dashboard: React.FC<Props> = props => {
     const [open, setOpen] = React.useState(true);
     const [window, setWindow] = React.useState('portfolio');
 
+    console.log("Dashboard - Render")
+
     const appBarTitleSelectionHandler: () => string = () => {
         switch (window) {
             case 'dashboard':
@@ -147,11 +149,8 @@ const Dashboard: React.FC<Props> = props => {
             case 'portfolio':
                 return (
                     <WindowPortfolio
-                        setPage={props.setPage}
-                        id={props.id}
+                        setWindow={setWindow}
                         token={props.token}
-                        firstName={props.firstName}
-                        lastName={props.lastName}
                     />
                 );
             default:

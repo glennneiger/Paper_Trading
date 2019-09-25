@@ -43,6 +43,8 @@ const WindowDashboard: React.FC<Props> = props => {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+    console.log("Window Dashboard - Render")
+
     return (
         <main className={classes.content}>
             <div className={classes.appBarSpacer} />

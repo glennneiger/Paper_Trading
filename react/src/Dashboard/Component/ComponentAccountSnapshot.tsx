@@ -19,8 +19,8 @@ interface Data {
 
 const rows: Data[] = [
     {id: 0, subject: 'Net Account Value', value: 100},
-    {id: 0, subject: 'Day\'s Gain', value: 100},
-    {id: 0, subject: 'Cash Purchasing Power', value: 100},
+    {id: 1, subject: 'Day\'s Gain', value: 100},
+    {id: 2, subject: 'Cash Purchasing Power', value: 100},
 ];
 
 
