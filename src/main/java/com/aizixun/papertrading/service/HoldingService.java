@@ -8,6 +8,7 @@ public interface HoldingService {
 	public List<Holding> findAll(); 
 	public Holding findById(int id);
 	public List<Holding> findByUserId(int userId); 
+	public Holding findByUserIdAndSymbol(int userId, String symbol); 
 	public void save(Holding holding);
 	public void deleteById(int id); 
 }

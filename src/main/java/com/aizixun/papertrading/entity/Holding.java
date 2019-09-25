@@ -38,8 +38,7 @@ public class Holding {
 		
 	}
 	
-	public Holding(int id, int userId, String stockSymbol, double pricePaid, int quantity, Timestamp tradeDate) {
-		this.id = id;
+	public Holding(int userId, String stockSymbol, double pricePaid, int quantity, Timestamp tradeDate) {
 		this.userId = userId;
 		this.stockSymbol = stockSymbol;
 		this.pricePaid = pricePaid;

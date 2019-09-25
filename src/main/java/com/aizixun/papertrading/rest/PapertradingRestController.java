@@ -75,8 +75,14 @@ public class PapertradingRestController {
 	}
 	
 	@GetMapping("/stock/quote/{stockSymbol}")
-	public Mono<StockQuote> getStockQuote(@PathVariable String stockSymbol) {
-		return iexCloudService.getStockQuote(stockSymbol); 
+	public String getStockQuote(@PathVariable String stockSymbol) {
+		try {
+			iexCloudService.getStockQuote(stockSymbol).block(); 
+			return "Success";
+		}
+		catch(Exception e) {
+			return "Error"; 
+		}
 	}
 	
 	@GetMapping("/stock/chart/{stockSymbol}")

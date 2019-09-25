@@ -45,6 +45,17 @@ public class HoldingDAOHibernateImpl implements HoldingDAO {
 		List<Holding> holdingList = holdingQuery.getResultList();
 		return holdingList;
 	}
+	
+	@Override 
+	public Holding findByUserIdAndSymbol(int userId, String symbol) {
+		Session currentSession = entityManager.unwrap(Session.class);
+		Query<Holding> holdingQuery = currentSession.createQuery("From Holding where userId=:userId and stockSymbol=:stockSymbol", Holding.class);
+		holdingQuery.setParameter("userId", userId);
+		holdingQuery.setParameter("stockSymbol", symbol);
+		List<Holding> holdingList = holdingQuery.getResultList();
+		if (holdingList.size() == 1) return holdingList.get(0);
+		else return null;
+	}
 
 	@Override
 	public void save(Holding holding) {
@@ -55,7 +66,7 @@ public class HoldingDAOHibernateImpl implements HoldingDAO {
 	@Override
 	public void deleteById(int id) {
 		Session currentSession = entityManager.unwrap(Session.class);
-		Query<Holding> holdingQuery = currentSession.createQuery("delete from Holding where id=:holdingId", Holding.class);
+		Query<Holding> holdingQuery = currentSession.createQuery("delete from Holding where id=:holdingId");
 		holdingQuery.setParameter("holdingId", id);
 		holdingQuery.executeUpdate();
 	}

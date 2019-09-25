@@ -37,6 +37,10 @@ public class HoldingServiceImpl implements HoldingService {
 	public List<Holding> findByUserId(int userId){
 		return holdingDAO.findByUserId(userId);
 	}
+	
+	public Holding findByUserIdAndSymbol(int userId, String symbol) {
+		return holdingDAO.findByUserIdAndSymbol(userId, symbol);
+	}
 
 	@Override
 	@Transactional

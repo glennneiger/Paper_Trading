@@ -2,6 +2,7 @@ package com.aizixun.papertrading.service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.aizixun.papertrading.dao.UserDAO;
+import com.aizixun.papertrading.entity.Holding;
 import com.aizixun.papertrading.entity.User;
 import com.aizixun.papertrading.model.Portfolio;
 import com.aizixun.papertrading.model.StockQuote;
@@ -156,33 +158,99 @@ public class UserServiceImpl implements UserService {
 		return response;
 	}
 	
+	private int getUserIdFromToken(Map<String, Object> response, String token) {
+		int id = jwtTokenService.getUserIdFromToken(token);
+		if (id == 0) {
+			response.replace(RESPONSE_SUCCESS, false); 
+			response.put(RESPONSE_FAIL_REASON, "invalid-token");
+		} 
+		return id; 
+	} 
+	
+	private StockQuote getStockQuote(Map<String, Object> response, String symbol) {
+		StockQuote stockQuote = null;	
+		try {
+			stockQuote = iexCloudService.getStockQuote(symbol).block(); 
+		}
+		catch(Exception e) {
+			response.put(RESPONSE_SUCCESS, false); 
+			response.put(RESPONSE_FAIL_REASON, "invalid-symbol");
+		}
+		return stockQuote; 
+	}
+	
+	private void userOrderSale(int quantity, User user, StockQuote stockQuote, Map<String, Object> response) {
+		double totalPrice = stockQuote.getLatestPrice() * quantity; 
+		Holding holding = holdingService.findByUserIdAndSymbol(user.getId(), stockQuote.getSymbol());
+		if (holding == null || (holding.getQuantity() < quantity)) {
+			response.put(RESPONSE_SUCCESS, false); 
+			response.put(RESPONSE_FAIL_REASON, "insufficient-shares");
+		}
+		else if (holding.getQuantity() == quantity) {
+			holdingService.deleteById(holding.getId());
+			user.setCash(user.getCash() + totalPrice);
+		}
+		else {
+			Date date= new Date();
+			Timestamp tradeDate = new Timestamp(date.getTime()); 
+			holding.setTradeDate(tradeDate);
+			holding.setQuantity(holding.getQuantity() - quantity);
+			holdingService.save(holding);
+			user.setCash(user.getCash() + totalPrice);
+		}
+	}
+	
+	private void userOrderBuy(int quantity, User user, StockQuote stockQuote, Map<String, Object> response) {
+		double totalPrice = stockQuote.getLatestPrice() * quantity; 
+		if (totalPrice > user.getCash()) {
+			response.put(RESPONSE_SUCCESS, false); 
+			response.put(RESPONSE_FAIL_REASON, "insufficient-funds");
+		}
+		else {
+			user.setCash(user.getCash() - totalPrice);
+			
+			Date date= new Date();
+			Timestamp tradeDate = new Timestamp(date.getTime()); 
+			Holding holding = holdingService.findByUserIdAndSymbol(user.getId(), stockQuote.getSymbol());
+			if (holding == null) {
+				holding = new Holding(user.getId(), stockQuote.getSymbol(), stockQuote.getLatestPrice(), quantity, tradeDate);
+				holdingService.save(holding);
+			}
+			else {
+				holding.setTradeDate(tradeDate);
+				int newQuantity = holding.getQuantity() + quantity;
+				double newPricePaid = (holding.getPricePaid() * holding.getQuantity() + totalPrice) / newQuantity;
+				holding.setQuantity(newQuantity);
+				holding.setPricePaid(newPricePaid);
+				holdingService.save(holding);
+			}
+			
+
+		}
+	}
+	
 	@Override
 	@Transactional
 	public Map<String, Object> userOrder(String token, String symbol, int quantity, boolean sale) {
 		Map<String, Object> response = new HashMap<String, Object>();
-		int id = jwtTokenService.getUserIdFromToken(token);
+		response.put(RESPONSE_SUCCESS, true); 
 		
-		if (id == 0) {
-			response.put(RESPONSE_SUCCESS, false); 
-			response.put(RESPONSE_FAIL_REASON, "invalid-token");
-			return response; 
-		} 
-		
-		// TODO -- deal with invalid symbol 
+		int id = getUserIdFromToken(response, token);
+		if (! (boolean) response.get(RESPONSE_SUCCESS)) return response; 
 		
 		User user = findById(id);
-		StockQuote stockQuote = iexCloudService.getStockQuote(symbol).block(); 
-				
-		double totalPrice = stockQuote.getLatestPrice() * quantity; 
-		if (!sale && totalPrice > user.getCash()) {
-			response.put(RESPONSE_SUCCESS, false); 
-			response.put(RESPONSE_FAIL_REASON, "insufficient-funds");
-			return response; 
+		
+		StockQuote stockQuote = getStockQuote(response, symbol); 
+		if (! (boolean) response.get(RESPONSE_SUCCESS)) return response; 
+		
+		if (sale) {
+			userOrderSale(quantity, user, stockQuote, response);
+		}
+		else {
+			userOrderBuy(quantity, user, stockQuote, response);
 		}
 		
-		// TODO
-		
-		return null; 
+		return response; 
 	}
 	
 	@Override

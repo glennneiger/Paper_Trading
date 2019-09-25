@@ -29,11 +29,9 @@ public class IEXCloudServiceImpl implements IEXCloudService {
 	public Mono<StockQuote> getStockQuote(String stockSymbol) {
 		String uri = url +  "/stock/" + stockSymbol + "/quote?token=" + token; 
 		return webClient.get()
-                		.uri(uri)
-                		.retrieve()
-                		.bodyToMono(StockQuote.class);
-
-                		
+	            		.uri(uri)
+	            		.exchange()
+	            		.flatMap(clientResponse -> clientResponse.bodyToMono(StockQuote.class));
 	}
 	
 	public Flux<StockChartElement> getStockChart(String stockSymbol) {
