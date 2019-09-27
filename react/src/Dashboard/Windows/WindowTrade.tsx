@@ -3,11 +3,8 @@ import clsx from 'clsx';
 import { Container, Grid, Paper, } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import Copyright from '../../Copyright/Copyright';
-import ComponentBalance from '../Component/ComponentBalance';
-import ComponentUSMarket from '../Component/ComponentUSMarket';
-import ComponentAccountSnapshot from '../Component/ComponentAccountSnapshot';
-import ComponentUSMarketChart from '../Component/ComponentUSMarketChart';
-import HTTPClient from '../../HTTPClient/HTTPClient';
+import ComponentTrade from '../Component/ComponentTrade';
+import ComponentTradeData from '../Component/ComponentTradeData';
 
 const useStyles = makeStyles(theme => ({
 
@@ -28,23 +25,22 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
     },
     fixedHeight: {
-        height: 350,
+        height: '70vh',
     },
 }));
 
-
 interface Props {
-    setPage: React.Dispatch<React.SetStateAction<string>>;
-    id: number;
+    setWindow: React.Dispatch<React.SetStateAction<string>>;
     token: string;
-    firstName: string;
-    lastName: string;
 }
 
 const WindowDashboard: React.FC<Props> = props => {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+    const [symbol, setSymbol] = React.useState('');
+
+    
 
     console.log("Window Dashboard - Render")
 
@@ -53,28 +49,22 @@ const WindowDashboard: React.FC<Props> = props => {
             <div className={classes.appBarSpacer} />
             <Container maxWidth="lg" className={classes.container}>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} md={4} lg={4}>
+                    <Grid item xs={12} md={5} lg={5}>
                         <Paper className={fixedHeightPaper}>
-                            <ComponentBalance
-                                firstName={props.firstName}
-                                lastName={props.lastName}
+                            <ComponentTrade
+                                setWindow={props.setWindow}
                                 token={props.token}
+                                symbol={symbol}
+                                setSymbol={setSymbol}
                             />
                         </Paper>
                     </Grid>
-                    <Grid item xs={12} md={8} lg={8}>
+                    <Grid item xs={12} md={7} lg={7}>
                         <Paper className={fixedHeightPaper}>
-                            <ComponentAccountSnapshot />
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12} md={8} lg={8}>
-                        <Paper className={fixedHeightPaper}>
-                            <ComponentUSMarketChart />
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12} md={4} lg={4}>
-                        <Paper className={fixedHeightPaper}>
-                            <ComponentUSMarket />
+                            <ComponentTradeData
+                                token={props.token}
+                                symbol={symbol}
+                            />
                         </Paper>
                     </Grid>
                 </Grid>

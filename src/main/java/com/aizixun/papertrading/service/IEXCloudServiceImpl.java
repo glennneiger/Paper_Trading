@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.aizixun.papertrading.model.StockChartElement;
+import com.aizixun.papertrading.model.StockInfo;
 import com.aizixun.papertrading.model.StockQuote;
+import com.aizixun.papertrading.model.StockStats;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -32,6 +34,22 @@ public class IEXCloudServiceImpl implements IEXCloudService {
 	            		.uri(uri)
 	            		.exchange()
 	            		.flatMap(clientResponse -> clientResponse.bodyToMono(StockQuote.class));
+	}
+	
+	public Mono<StockStats> getStockStats(String stockSymbol){
+		String uri = url +  "/stock/" + stockSymbol + "/stats?token=" + token; 
+		return webClient.get()
+	            		.uri(uri)
+	            		.exchange()
+	            		.flatMap(clientResponse -> clientResponse.bodyToMono(StockStats.class));
+	}
+	
+	public StockInfo getStockInfo(String stockSymbol) {
+		StockQuote stockQuote = getStockQuote(stockSymbol).block();
+		StockStats stockStats = getStockStats(stockSymbol).block();
+		
+		StockInfo stockInfo = new StockInfo(stockQuote, stockStats);
+		return stockInfo;
 	}
 	
 	public Flux<StockChartElement> getStockChart(String stockSymbol) {

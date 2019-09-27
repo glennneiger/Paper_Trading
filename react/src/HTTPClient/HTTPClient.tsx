@@ -23,6 +23,17 @@ const getUserPortfolio: (token: string) => Promise<any> = (token) => {
         .then(response => {return response.data});
 }
 
+const getStockInfo: (token: string, symbol: string) => Promise<any> = (token, symbol) => {
+    let params = {
+        params: {
+            token: token, 
+            symbol: symbol
+        }
+    }
+    return axios.get(API_URL + '/api/stock/info', params)
+        .then(response => {return response.data});
+}
+
 const postUserSignIn: (email: string, password: string) => Promise<any> = (email, password) => {
     let data = {
         user_email: email,
@@ -43,4 +54,22 @@ const postUserSignUp: (firstName: string, lastName: string, email: string, passw
         .then(response => {return response.data});
 }
 
-export default {getUserEmailExist, getUserPortfolio, postUserSignIn, postUserSignUp};
+const postOrder: (token: string, symbol: string, quantity: number, sale: boolean) => Promise<any> = (token, symbol, quantity, sale) => {
+    let data = {
+        token: token,
+        symbol: symbol,
+        quantity: quantity,
+        sale: sale,
+    }
+    return axios.post(API_URL + '/api/user/order', data)
+        .then(response => {return response.data});
+}
+
+export default {
+    getUserEmailExist, 
+    getUserPortfolio, 
+    getStockInfo, 
+    postUserSignIn, 
+    postUserSignUp,
+    postOrder
+};

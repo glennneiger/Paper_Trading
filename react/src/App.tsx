@@ -8,7 +8,7 @@ const App: React.FC = () => {
 
     const [page, setPage] = React.useState<string>('dashboard');
     const [id, setId] = React.useState<number>(0);
-    const [token, setToken] = React.useState<string>('eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInVsbiI6IkJhcnJvbiIsInVmbiI6Ikpvc2VmZiIsInVlbSI6ImFkbWluQGFkbWluLmNvbSIsImV4cCI6MTU2OTUzNjEyMiwiaWF0IjoxNTY5NDQ4MjgyOTM5fQ.LSmGVznw3jNO3q_zgNsbHuqJomOXMwE85R70cu-Jh7akyYIieuY1JlWZ0d9L1j1blMTufUIU4wQpiUat3Z4LZA');
+    const [token, setToken] = React.useState<string>('eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInVsbiI6IkJhcnJvbiIsInVmbiI6Ikpvc2VmZiIsInVlbSI6ImFkbWluQGFkbWluLmNvbSIsImV4cCI6MTU2OTY5MjE5OCwiaWF0IjoxNTY5NjA0MzU4OTcyfQ.dszRyxl9H30TLEvQU3nSNpi5nbVXkZ7wC416hu2xwTLk7Ey9AiGYCNKA62V1_nLxO3Mbiq3PAG_3gmE3Mlsaiw');
     const [firstName, setFirstName] = React.useState<string>('Humphrey');
     const [lastName, setLastName] = React.useState<string>('Appleby');
 

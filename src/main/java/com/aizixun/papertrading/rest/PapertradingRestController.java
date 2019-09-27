@@ -14,15 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.aizixun.papertrading.entity.Holding;
 import com.aizixun.papertrading.entity.User;
-import com.aizixun.papertrading.model.Portfolio;
 import com.aizixun.papertrading.model.StockChartElement;
-import com.aizixun.papertrading.model.StockQuote;
+import com.aizixun.papertrading.model.StockInfo;
 import com.aizixun.papertrading.service.HoldingService;
 import com.aizixun.papertrading.service.IEXCloudService;
 import com.aizixun.papertrading.service.UserService;
 
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api")
@@ -91,6 +89,11 @@ public class PapertradingRestController {
 	}
 	
 	// --------- Official & In Use ----------
+	@GetMapping("/stock/info")
+	public StockInfo stockInfo(@RequestParam(name = "token") String token, @RequestParam(name = "symbol") String symbol) {
+		return iexCloudService.getStockInfo(symbol);
+	}
+	
 	@GetMapping("/user/email_exist")
 	public boolean userEmailExist(@RequestParam(name = "user_email") String userEmail) {
 		return userService.userEmailExist(userEmail); 

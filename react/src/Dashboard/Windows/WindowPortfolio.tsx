@@ -41,6 +41,7 @@ const WindowPortfolio: React.FC<Props> = props => {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+    
     console.log("Window Portfolio - Render")
 
     return (

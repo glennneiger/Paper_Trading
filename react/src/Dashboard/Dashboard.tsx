@@ -8,6 +8,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import Menu from './Menu';
 import WindowDashboard from './Windows/WindowDashboard';
 import WindowPortfolio from './Windows/WindowPortfolio';
+import WindowTrade from './Windows/WindowTrade';
 
 
 const drawerWidth = 240;
@@ -111,7 +112,7 @@ interface Props {
 const Dashboard: React.FC<Props> = props => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
-    const [window, setWindow] = React.useState('portfolio');
+    const [window, setWindow] = React.useState('trade');
 
     console.log("Dashboard - Render")
 
@@ -149,6 +150,13 @@ const Dashboard: React.FC<Props> = props => {
             case 'portfolio':
                 return (
                     <WindowPortfolio
+                        setWindow={setWindow}
+                        token={props.token}
+                    />
+                );
+            case 'trade':
+                return (
+                    <WindowTrade
                         setWindow={setWindow}
                         token={props.token}
                     />
