@@ -1,7 +1,7 @@
 import axios from 'axios'; 
 
-//const API_URL: string = `${window.location.protocol}//${window.location.host}`;
-const API_URL: string = 'http://localhost:5050';
+const API_URL: string = `${window.location.protocol}//${window.location.host}`;
+//const API_URL: string = 'http://localhost:5050';
 
 const getUserEmailExist: (email: string) => Promise<any> = (email) => {
     let params = {

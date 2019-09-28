@@ -64,7 +64,7 @@ const Balance: React.FC<Props> = props => {
     return (
         <React.Fragment>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                Welcome! {props.firstName} {props.lastName}
+                Welcome! {portfolio === null ? "" : portfolio.portfolio.firstName + " " + portfolio.portfolio.lastName} 
             </Typography>
             <Typography component="h2" variant="subtitle1" color="primary" gutterBottom>
                 Your Current Account Value
