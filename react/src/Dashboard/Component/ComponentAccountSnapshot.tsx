@@ -6,6 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import { TableRow, Typography } from '@material-ui/core';
+import Portfolio from '../Interface/PortfolioInterface';
 
 const fatchData: (id: number, symbol: string, lastPrice: number, change: number, changePercentage: number) => Object = (id, symbol, lastPrice, change, changePercentage) => {
     return { id, symbol, lastPrice, change, changePercentage };
@@ -14,14 +15,8 @@ const fatchData: (id: number, symbol: string, lastPrice: number, change: number,
 interface Data {
     id: number;
     subject: string;
-    value: number;
+    value: string;
 }
-
-const rows: Data[] = [
-    {id: 0, subject: 'Net Account Value', value: 100},
-    {id: 1, subject: 'Day\'s Gain', value: 100},
-    {id: 2, subject: 'Cash Purchasing Power', value: 100},
-];
 
 
 const useStyles: (props?: any) => Record<any, string>  = makeStyles(theme => ({
@@ -30,9 +25,26 @@ const useStyles: (props?: any) => Record<any, string>  = makeStyles(theme => ({
     },
 }));
 
+interface Props {
+    portfolio: Portfolio | null; 
+}
 
-const USMarket: React.FC = () => {
+const toCommas: (value: string) => string = (value) => {
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+const USMarket: React.FC<Props> = (props) => {
     const classes = useStyles();
+
+    let rows: Data[] = [];
+    if (props.portfolio !== null) {
+        rows = [
+            {id: 0, subject: 'Net Account Value', value: toCommas(props.portfolio.netAssets.toFixed(2))},
+            {id: 1, subject: 'Day\'s Gain', value: toCommas(props.portfolio.daysGain.toFixed(2))},
+            {id: 2, subject: 'Cash Purchasing Power', value: toCommas(props.portfolio.cash.toFixed(2))},
+        ];
+    } 
+    
 
     return (
         <React.Fragment>

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.aizixun.papertrading.entity.User;
+import com.aizixun.papertrading.exception.ClientRequestException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -72,13 +73,13 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 	}
 	
 	@Override
-	public int getUserIdFromToken(String token) {
+	public int getUserIdFromToken(String token) throws ClientRequestException {
 		try {
 			Claims claims = getClaimsFromToken(token);
 			return claims.get(CLAIM_KEY_USER_ID, Integer.class); 
 		}
 		catch (Exception e) {
-			return 0; 
+			throw new ClientRequestException("invalid-token");
 		}
 	}
 

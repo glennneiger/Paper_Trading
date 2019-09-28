@@ -2,10 +2,12 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, ListItemText, Divider, GridList, Typography } from '@material-ui/core';
 import HTTPClient from '../../HTTPClient/HTTPClient';
+import { symbol } from 'prop-types';
 
 interface Props {
     token: string;
     symbol: string;
+    signOut: (sessionExpired: boolean) => void; 
 }
 
 const useStyles: (props?: any) => Record<any, string> = makeStyles(theme => ({
@@ -48,9 +50,20 @@ const ComponentTradeData: React.FC<Props> = props => {
     const [stockInfo, setStateInfo] = React.useState<StockInfo | null>(null);
 
     React.useEffect(() => {
-        HTTPClient
-            .getStockInfo(props.token, props.symbol)
-            .then(response => setStateInfo(response));
+        if (props.symbol !== '') {
+            HTTPClient
+                .getStockInfo(props.token, props.symbol)
+                .then(response => setStateInfo(response))
+                .catch(error => {
+                    if (error.response.status === 500 && error.response.data.message === 'invalid-token'){
+                        props.signOut(true);
+                    }
+                    setStateInfo(null);
+                });
+        }
+        else {
+            setStateInfo(null);
+        }
     }, [props.symbol]);
 
     return (

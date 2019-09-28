@@ -33,15 +33,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-    setWindow: React.Dispatch<React.SetStateAction<string>>;
     token: string;
+    signOut: (sessionExpired: boolean) => void; 
 }
 
 const WindowPortfolio: React.FC<Props> = props => {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-    
+
     console.log("Window Portfolio - Render")
 
     return (
@@ -52,8 +52,8 @@ const WindowPortfolio: React.FC<Props> = props => {
                     <Grid item xs={12}>
                         <Paper className={fixedHeightPaper}>
                             <ComponentPortfolio
-                                setWindow={props.setWindow}
                                 token={props.token}
+                                signOut={props.signOut}
                             />
                         </Paper>
                     </Grid>

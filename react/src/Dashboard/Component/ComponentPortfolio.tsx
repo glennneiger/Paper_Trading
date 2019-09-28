@@ -2,10 +2,12 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import HTTPClient from '../../HTTPClient/HTTPClient';
+import Portfolio from '../Interface/PortfolioInterface';
+import PortfolioHolding from '../Interface/PortfolioHoldingInterface';
 
-interface Props {
-    setWindow: React.Dispatch<React.SetStateAction<string>>;
+interface Props { 
     token: string;
+    signOut: (sessionExpired: boolean) => void; 
 }
 
 const useStyles: (props?: any) => Record<any, string> = makeStyles(theme => ({
@@ -20,32 +22,6 @@ const useStyles: (props?: any) => Record<any, string> = makeStyles(theme => ({
     },
 }));
 
-interface PortfolioHolding {
-    symbol: string;
-    lastPrice: number;
-    change: number;
-    changePercentage: number;
-    quantity: number;
-    pricePaid: number;
-    dayGain: number;
-    totalGain: number;
-    totalGainPercentage: number;
-    value: number;
-}
-
-interface Portfolio {
-    success: boolean;
-    portfolio: {
-        userId: number;
-        firstName: string;
-        lastName: string;
-        cash: number;
-        netAssets: number;
-        totalGain: number;
-        portfolioHolding: PortfolioHolding[];
-    }
-}
-
 const toCommas: (value: string) => string = (value) => {
     return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -57,14 +33,22 @@ const ComponentPortfolio: React.FC<Props> = props => {
     React.useEffect(() => {
         HTTPClient
             .getUserPortfolio(props.token)
-            .then(response => setPortfolio(response));
+            .then(response => setPortfolio(response))
+            .catch(error => {
+                if (error.response !== undefined) {
+                    if (error.response.status === 500 && error.response.data.message === 'invalid-token'){
+                        props.signOut(true);
+                    }
+                }
+                setPortfolio(null);
+            });
     }, []);
 
     let portfolioHoldingItems: PortfolioHolding[] = [];
     let name = '';
     if (portfolio !== null) {
-        name = portfolio.portfolio.firstName + ' ' + portfolio.portfolio.lastName + '\'s ';
-        portfolioHoldingItems = portfolio.portfolio.portfolioHolding;
+        name = portfolio.firstName + ' ' + portfolio.lastName + '\'s ';
+        portfolioHoldingItems = portfolio.portfolioHolding;
     }
 
     return (
@@ -94,25 +78,25 @@ const ComponentPortfolio: React.FC<Props> = props => {
                             <TableCell align="right">
                                 {toCommas(holding.lastPrice.toFixed(2))}
                             </TableCell>
-                            <TableCell align="right" className={holding.change > 0 ? classes.valueUp : classes.valueDown}>
-                                {toCommas(Math.abs(holding.change).toFixed(2))}
+                            <TableCell align="right" className={holding.change > -0.001 ? classes.valueUp : classes.valueDown}>
+                                {toCommas(holding.change.toFixed(2))}
                             </TableCell>
-                            <TableCell align="right" className={holding.changePercentage > 0 ? classes.valueUp : classes.valueDown}>
-                                {toCommas(Math.abs(holding.changePercentage).toFixed(2))}%
+                            <TableCell align="right" className={holding.changePercentage > -0.001 ? classes.valueUp : classes.valueDown}>
+                                {toCommas(holding.changePercentage.toFixed(2))}%
                             </TableCell>
                             <TableCell align="right">
                                 {toCommas(holding.quantity.toFixed(0))}
                             </TableCell>
                             <TableCell align="right">
                                 {toCommas(holding.pricePaid.toFixed(2))}</TableCell>
-                            <TableCell align="right" className={holding.dayGain > 0 ? classes.valueUp : classes.valueDown}>
-                                {toCommas(Math.abs(holding.dayGain).toFixed(2))}
+                            <TableCell align="right" className={holding.dayGain > -0.001 ? classes.valueUp : classes.valueDown}>
+                                {toCommas(holding.dayGain.toFixed(2))}
                             </TableCell>
-                            <TableCell align="right" className={holding.totalGain > 0 ? classes.valueUp : classes.valueDown}>
-                                {toCommas(Math.abs(holding.totalGain).toFixed(2))}
+                            <TableCell align="right" className={holding.totalGain > -0.001 ? classes.valueUp : classes.valueDown}>
+                                {toCommas(holding.totalGain.toFixed(2))}
                             </TableCell>
-                            <TableCell align="right" className={holding.totalGainPercentage > 0 ? classes.valueUp : classes.valueDown}>
-                                {toCommas(Math.abs(holding.totalGainPercentage).toFixed(2))}%
+                            <TableCell align="right" className={holding.totalGainPercentage > -0.001 ? classes.valueUp : classes.valueDown}>
+                                {toCommas(holding.totalGainPercentage.toFixed(2))}%
                             </TableCell>
                             <TableCell align="right">
                                 {toCommas(holding.value.toFixed(2))}

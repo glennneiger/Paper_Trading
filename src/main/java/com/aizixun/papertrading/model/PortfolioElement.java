@@ -42,7 +42,7 @@ public class PortfolioElement {
 		value = lastPrice * quantity;
 		
 		double totalPricePaid = pricePaid * quantity; 
-		totalGain = totalPricePaid - value; 
+		totalGain = value - totalPricePaid ; 
 		totalGainPercentage = totalGain / totalPricePaid * 100;
 	}
 	

@@ -9,8 +9,11 @@ const App: React.FC = () => {
     const [page, setPage] = React.useState<string>('sign-in');
     const [id, setId] = React.useState<number>(0);
     const [token, setToken] = React.useState<string>('');
-    const [firstName, setFirstName] = React.useState<string>('');
-    const [lastName, setLastName] = React.useState<string>('');
+
+    const signOut: (sessionExpired: boolean) => void = (sessionExpired) => {
+        setToken('');
+        setPage('sign-in'); 
+    }
 
     const getPageHandler: () => JSX.Element = () => {
         switch(page) {
@@ -18,20 +21,14 @@ const App: React.FC = () => {
                 return (
                     <SignIn 
                         setPage={setPage} 
-                        setId={setId} 
                         setToken={setToken}
-                        setFirstName={setFirstName}
-                        setLastName={setLastName}
                     />
                 ); 
             case 'sign-up':
                 return (
                     <SignUp 
                         setPage={setPage} 
-                        setId={setId} 
                         setToken={setToken}
-                        setFirstName={setFirstName}
-                        setLastName={setLastName}
                     />
                 ); 
             case 'forgot-password':
@@ -39,21 +36,15 @@ const App: React.FC = () => {
             case 'dashboard':
                 return (
                     <Dashboard 
-                        setPage={setPage}
-                        id={id}
                         token={token}
-                        firstName={firstName}
-                        lastName={lastName}
+                        signOut={signOut}
                     /> 
                 );
             default:
                 return (
                     <SignIn 
                         setPage={setPage} 
-                        setId={setId} 
                         setToken={setToken}
-                        setFirstName={setFirstName}
-                        setLastName={setLastName}
                     />
                 ); 
         }

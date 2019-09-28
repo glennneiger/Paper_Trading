@@ -15,6 +15,7 @@ public class Portfolio {
 	private String lastName;
 	private double cash; 
 	private double netAssets;
+	private double daysGain; 
 	private double totalGain;
 	private List<PortfolioElement> portfolioHolding; 
 	
@@ -29,6 +30,7 @@ public class Portfolio {
 		requestHoldingData(iexCloudService, holdingService);
 		calculateNetAsset();
 		calculateTotalGain();
+		calculateDaysGain();
 	}
 	
 	private void requestUserData(UserService userService) {
@@ -62,6 +64,14 @@ public class Portfolio {
 			result += portfolioElement.getTotalGain();
 		}
 		totalGain = result; 
+	}
+	
+	private void calculateDaysGain() {
+		double result = 0; 
+		for(PortfolioElement portfolioElement : portfolioHolding) {
+			result += portfolioElement.getDayGain();
+		}
+		daysGain = result; 
 	}
 
 
@@ -98,6 +108,10 @@ public class Portfolio {
 
 	public double getTotalGain() {
 		return totalGain;
+	}
+
+	public double getDaysGain() {
+		return daysGain;
 	}
 	
 

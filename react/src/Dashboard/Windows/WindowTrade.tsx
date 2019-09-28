@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-    setWindow: React.Dispatch<React.SetStateAction<string>>;
+    signOut: (sessionExpired: boolean) => void; 
     token: string;
 }
 
@@ -52,10 +52,10 @@ const WindowDashboard: React.FC<Props> = props => {
                     <Grid item xs={12} md={5} lg={5}>
                         <Paper className={fixedHeightPaper}>
                             <ComponentTrade
-                                setWindow={props.setWindow}
                                 token={props.token}
                                 symbol={symbol}
                                 setSymbol={setSymbol}
+                                signOut={props.signOut}
                             />
                         </Paper>
                     </Grid>
@@ -64,6 +64,7 @@ const WindowDashboard: React.FC<Props> = props => {
                             <ComponentTradeData
                                 token={props.token}
                                 symbol={symbol}
+                                signOut={props.signOut}
                             />
                         </Paper>
                     </Grid>

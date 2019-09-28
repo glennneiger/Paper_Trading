@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.aizixun.papertrading.dao.UserDAO;
 import com.aizixun.papertrading.entity.Holding;
 import com.aizixun.papertrading.entity.User;
+import com.aizixun.papertrading.exception.ClientRequestException;
 import com.aizixun.papertrading.model.Portfolio;
 import com.aizixun.papertrading.model.StockQuote;
 
@@ -63,18 +64,10 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional
-	public Map<String, Object> findPortfolioByToken(String token) {
+	public Portfolio findPortfolioByToken(String token) throws ClientRequestException {
 		Map<String, Object> response = new HashMap<String, Object>();
 		int id = jwtTokenService.getUserIdFromToken(token);
-		
-		if (id == 0) {
-			response.put(RESPONSE_SUCCESS, false); 
-		} 
-		else {
-			response.put(RESPONSE_SUCCESS, true); 
-			response.put(RESPONSE_PORTFOLIO, new Portfolio(id, iexCloudService, this, holdingService)); 
-		}
-		return response; 
+		return new Portfolio(id, iexCloudService, this, holdingService); 
 	}
 	
 	
@@ -158,33 +151,20 @@ public class UserServiceImpl implements UserService {
 		return response;
 	}
 	
-	private int getUserIdFromToken(Map<String, Object> response, String token) {
-		int id = jwtTokenService.getUserIdFromToken(token);
-		if (id == 0) {
-			response.replace(RESPONSE_SUCCESS, false); 
-			response.put(RESPONSE_FAIL_REASON, "invalid-token");
-		} 
-		return id; 
-	} 
-	
-	private StockQuote getStockQuote(Map<String, Object> response, String symbol) {
-		StockQuote stockQuote = null;	
+	private StockQuote getStockQuote(String symbol) throws ClientRequestException {
 		try {
-			stockQuote = iexCloudService.getStockQuote(symbol).block(); 
+			return iexCloudService.getStockQuote(symbol).block(); 
 		}
 		catch(Exception e) {
-			response.put(RESPONSE_SUCCESS, false); 
-			response.put(RESPONSE_FAIL_REASON, "invalid-symbol");
+			throw new ClientRequestException("invalid-symbol");
 		}
-		return stockQuote; 
 	}
 	
-	private void userOrderSale(int quantity, User user, StockQuote stockQuote, Map<String, Object> response) {
+	private void userOrderSale(int quantity, User user, StockQuote stockQuote) throws ClientRequestException {
 		double totalPrice = stockQuote.getLatestPrice() * quantity; 
 		Holding holding = holdingService.findByUserIdAndSymbol(user.getId(), stockQuote.getSymbol());
 		if (holding == null || (holding.getQuantity() < quantity)) {
-			response.put(RESPONSE_SUCCESS, false); 
-			response.put(RESPONSE_FAIL_REASON, "insufficient-shares");
+			throw new ClientRequestException("insufficient-shares");
 		}
 		else if (holding.getQuantity() == quantity) {
 			holdingService.deleteById(holding.getId());
@@ -200,11 +180,10 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
-	private void userOrderBuy(int quantity, User user, StockQuote stockQuote, Map<String, Object> response) {
+	private void userOrderBuy(int quantity, User user, StockQuote stockQuote) throws ClientRequestException {
 		double totalPrice = stockQuote.getLatestPrice() * quantity; 
 		if (totalPrice > user.getCash()) {
-			response.put(RESPONSE_SUCCESS, false); 
-			response.put(RESPONSE_FAIL_REASON, "insufficient-funds");
+			throw new ClientRequestException("insufficient-funds");
 		}
 		else {
 			user.setCash(user.getCash() - totalPrice);
@@ -231,26 +210,18 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional
-	public Map<String, Object> userOrder(String token, String symbol, int quantity, boolean sale) {
-		Map<String, Object> response = new HashMap<String, Object>();
-		response.put(RESPONSE_SUCCESS, true); 
-		
-		int id = getUserIdFromToken(response, token);
-		if (! (boolean) response.get(RESPONSE_SUCCESS)) return response; 
-		
+	public void userOrder(String token, String symbol, int quantity, boolean sale) throws ClientRequestException {
+		if (quantity == 0) throw new ClientRequestException("invalid-quantity");
+		int id = jwtTokenService.getUserIdFromToken(token);
 		User user = findById(id);
-		
-		StockQuote stockQuote = getStockQuote(response, symbol); 
-		if (! (boolean) response.get(RESPONSE_SUCCESS)) return response; 
-		
+		StockQuote stockQuote = getStockQuote(symbol); 
+
 		if (sale) {
-			userOrderSale(quantity, user, stockQuote, response);
+			userOrderSale(quantity, user, stockQuote);
 		}
 		else {
-			userOrderBuy(quantity, user, stockQuote, response);
+			userOrderBuy(quantity, user, stockQuote);
 		}
-		
-		return response; 
 	}
 	
 	@Override

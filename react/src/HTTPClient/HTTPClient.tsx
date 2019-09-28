@@ -1,7 +1,7 @@
 import axios from 'axios'; 
 
-const API_URL: string = `${window.location.protocol}//${window.location.host}`;
-//const API_URL: string = 'http://localhost:5050';
+//const API_URL: string = `${window.location.protocol}//${window.location.host}`;
+const API_URL: string = 'http://localhost:5050';
 
 const getUserEmailExist: (email: string) => Promise<any> = (email) => {
     let params = {
@@ -10,7 +10,7 @@ const getUserEmailExist: (email: string) => Promise<any> = (email) => {
         }
     }
     return axios.get(API_URL + '/api/user/email_exist', params)
-        .then(response => {return response.data});
+        .then(response => {return response.data}); 
 }
 
 const getUserPortfolio: (token: string) => Promise<any> = (token) => {
@@ -20,7 +20,7 @@ const getUserPortfolio: (token: string) => Promise<any> = (token) => {
         }
     }
     return axios.get(API_URL + '/api/user/portfolio', params)
-        .then(response => {return response.data});
+        .then(response => {return response.data})
 }
 
 const getStockInfo: (token: string, symbol: string) => Promise<any> = (token, symbol) => {

@@ -4,7 +4,7 @@ import { CssBaseline, AppBar, Toolbar, IconButton, Typography, Badge, Drawer, Di
 import { makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Menu from './Menu';
 import WindowDashboard from './Windows/WindowDashboard';
 import WindowPortfolio from './Windows/WindowPortfolio';
@@ -102,17 +102,14 @@ const useStyles = makeStyles(theme => ({
 
 
 interface Props {
-    setPage: React.Dispatch<React.SetStateAction<string>>;
-    id: number;
     token: string;
-    firstName: string;
-    lastName: string;
+    signOut: (sessionExpired: boolean) => void; 
 }
 
 const Dashboard: React.FC<Props> = props => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
-    const [window, setWindow] = React.useState('trade');
+    const [window, setWindow] = React.useState('dashboard');
 
     console.log("Dashboard - Render")
 
@@ -140,35 +137,29 @@ const Dashboard: React.FC<Props> = props => {
             case 'dashboard':
                 return (
                     <WindowDashboard
-                        setPage={props.setPage}
-                        id={props.id}
                         token={props.token}
-                        firstName={props.firstName}
-                        lastName={props.lastName}
+                        signOut={props.signOut}
                     />
                 );
             case 'portfolio':
                 return (
                     <WindowPortfolio
-                        setWindow={setWindow}
                         token={props.token}
+                        signOut={props.signOut}
                     />
                 );
             case 'trade':
                 return (
                     <WindowTrade
-                        setWindow={setWindow}
                         token={props.token}
+                        signOut={props.signOut}
                     />
                 );
             default:
                 return (
                     <WindowDashboard
-                        setPage={props.setPage}
-                        id={props.id}
                         token={props.token}
-                        firstName={props.firstName}
-                        lastName={props.lastName}
+                        signOut={props.signOut}
                     />
                 );
         };
@@ -204,10 +195,8 @@ const Dashboard: React.FC<Props> = props => {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         {appBarTitleSelectionHandler()}
                     </Typography>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <NotificationsIcon />
-                        </Badge>
+                    <IconButton color="secondary" onClick={() => {props.signOut(false)}}>
+                        <ExitToAppIcon />
                     </IconButton>
                 </Toolbar>
             </AppBar>

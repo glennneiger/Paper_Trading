@@ -8,10 +8,10 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { green } from '@material-ui/core/colors';
 
 interface Props {
-    setWindow: React.Dispatch<React.SetStateAction<string>>;
     token: string;
     symbol: string;
     setSymbol: React.Dispatch<React.SetStateAction<string>>;
+    signOut: (sessionExpired: boolean) => void; 
 }
 
 const useStyles: (props?: any) => Record<any, string> = makeStyles(theme => ({
@@ -62,35 +62,44 @@ const ComponentTrade: React.FC<Props> = props => {
 
     const tradeHandler: (event: React.MouseEvent<any>) => void = async (event) => {
         event.preventDefault();
-
-        let response = await HTTPClient.postOrder(props.token, props.symbol, quantity, action === 'sale' ? true : false);
-        console.log(response);
-        if (response.success) {
-            setSuccessOpen(true);
-            setQuantity(0);
-            props.setSymbol('');
-        }
-        else {
-            console.log(response.cause === 'insufficient-shares');
-            switch (response.cause) {
-                case 'invalid-token':
-                    setErrorMessage('Please sign in again');
-                    break; 
-                case 'invalid-symbol':
-                    setErrorMessage('The stock symbol is invalid.');
-                    break; 
-                case 'insufficient-shares':
-                    setErrorMessage('Insufficient shares in your account.');
-                    break; 
-                case 'insufficient-funds':
-                    setErrorMessage('Insufficient fund in your account.');
-                    break; 
-                default:
-                    setErrorMessage('Fail to place order.');
-                    break; 
-            }
+        if (quantity === 0) {
+            setErrorMessage('The quantity of your order cannot be 0.');
             setErrorOpen(true);
+            return; 
         }
+
+        HTTPClient
+            .postOrder(props.token, props.symbol, quantity, action === 'sale' ? true : false)
+            .then(response => {
+                setSuccessOpen(true);
+                setQuantity(0);
+                props.setSymbol('');
+            })
+            .catch(error => {
+                if (error.response.status === 500 && error.response.data.message === 'invalid-token'){
+                    props.signOut(true);
+                }
+                else if (error.response.status === 500) {
+                    switch (error.response.data.message) {
+                        case 'invalid-token':
+                            setErrorMessage('Please sign in again');
+                            break; 
+                        case 'invalid-symbol':
+                            setErrorMessage('The stock symbol is invalid.');
+                            break; 
+                        case 'insufficient-shares':
+                            setErrorMessage('Insufficient shares in your account.');
+                            break; 
+                        case 'insufficient-funds':
+                            setErrorMessage('Insufficient fund in your account.');
+                            break; 
+                        default:
+                            setErrorMessage('Fail to place order.');
+                            break; 
+                    }
+                    setErrorOpen(true);
+                }
+            });
     }
 
     return (
@@ -101,7 +110,7 @@ const ComponentTrade: React.FC<Props> = props => {
                     horizontal: 'center',
                 }}
                 open={successOpen}
-                autoHideDuration={9000}
+                autoHideDuration={3000}
                 onClose={() => { setSuccessOpen(false) }}
             >
                 <SnackbarContent
@@ -126,7 +135,7 @@ const ComponentTrade: React.FC<Props> = props => {
                     horizontal: 'center',
                 }}
                 open={errorOpen}
-                autoHideDuration={9000}
+                autoHideDuration={3000}
                 onClose={() => { setErrorOpen(false) }}
             >
                 <SnackbarContent

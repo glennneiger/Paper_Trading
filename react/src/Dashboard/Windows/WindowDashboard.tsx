@@ -8,6 +8,8 @@ import ComponentUSMarket from '../Component/ComponentUSMarket';
 import ComponentAccountSnapshot from '../Component/ComponentAccountSnapshot';
 import ComponentUSMarketChart from '../Component/ComponentUSMarketChart';
 import HTTPClient from '../../HTTPClient/HTTPClient';
+import Portfolio from '../Interface/PortfolioInterface';
+import PortfolioHolding from '../Interface/PortfolioHoldingInterface';
 
 const useStyles = makeStyles(theme => ({
 
@@ -32,21 +34,31 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-
 interface Props {
-    setPage: React.Dispatch<React.SetStateAction<string>>;
-    id: number;
-    token: string;
-    firstName: string;
-    lastName: string;
+    token: string; 
+    signOut: (sessionExpired: boolean) => void; 
 }
 
 const WindowDashboard: React.FC<Props> = props => {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+    const [portfolio, setPortfolio] = React.useState<Portfolio | null>(null);
 
-    console.log("Window Dashboard - Render")
+    React.useEffect(() => {
+        HTTPClient
+            .getUserPortfolio(props.token)
+            .then(response => setPortfolio(response))
+            .catch(error => {
+                if (error.response !== undefined) {
+                    if (error.response.status === 500 && error.response.data.message === 'invalid-token'){
+                        props.signOut(true);
+                    }
+                }
+                setPortfolio(null);
+            });
+    }, []);
+    
 
     return (
         <main className={classes.content}>
@@ -56,15 +68,15 @@ const WindowDashboard: React.FC<Props> = props => {
                     <Grid item xs={12} md={4} lg={4}>
                         <Paper className={fixedHeightPaper}>
                             <ComponentBalance
-                                firstName={props.firstName}
-                                lastName={props.lastName}
-                                token={props.token}
+                                portfolio={portfolio}
                             />
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={8} lg={8}>
                         <Paper className={fixedHeightPaper}>
-                            <ComponentAccountSnapshot />
+                            <ComponentAccountSnapshot 
+                                portfolio={portfolio}
+                            />
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={8} lg={8}>

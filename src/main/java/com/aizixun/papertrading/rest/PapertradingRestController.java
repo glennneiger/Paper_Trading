@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,9 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.aizixun.papertrading.entity.Holding;
 import com.aizixun.papertrading.entity.User;
+import com.aizixun.papertrading.exception.ClientRequestException;
+import com.aizixun.papertrading.model.MarketSnapshot;
+import com.aizixun.papertrading.model.Portfolio;
 import com.aizixun.papertrading.model.StockChartElement;
 import com.aizixun.papertrading.model.StockInfo;
 import com.aizixun.papertrading.service.HoldingService;
@@ -94,23 +99,38 @@ public class PapertradingRestController {
 		return iexCloudService.getStockInfo(symbol);
 	}
 	
+	@GetMapping("/stock/index")
+	public MarketSnapshot stockIndex(@RequestParam(name = "token") String token) {
+		return iexCloudService.getMarketSnapshot(token); 
+	}
+	
 	@GetMapping("/user/email_exist")
 	public boolean userEmailExist(@RequestParam(name = "user_email") String userEmail) {
 		return userService.userEmailExist(userEmail); 
 	}
 	
 	@GetMapping("/user/portfolio")
-	public Map<String, Object> getUserPortfolio(@RequestParam(name = "token") String token) {
-		return userService.findPortfolioByToken(token); 
+	public Portfolio getUserPortfolio(@RequestParam(name = "token") String token) {
+		try {
+			return userService.findPortfolioByToken(token); 
+		}
+		catch (ClientRequestException e) {
+	        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 	
 	@PostMapping("/user/order")
-	public Map<String, Object> userOrder(@RequestBody Map<String, Object> body) {
+	public void userOrder(@RequestBody Map<String, Object> body) {
 		String token = (String) body.get("token"); 
 		String symbol = (String) body.get("symbol"); 
 		int quantity = (int) body.get("quantity");
 		boolean sale = (boolean) body.get("sale"); 
-		return userService.userOrder(token, symbol, quantity, sale); 
+		try {
+			userService.userOrder(token, symbol, quantity, sale); 
+		}
+		catch (ClientRequestException e) {
+	        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 	
 	@PostMapping("/user/sign_in")
