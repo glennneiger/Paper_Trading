@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.aizixun.papertrading.entity.Holding;
+import com.aizixun.papertrading.entity.Order;
 import com.aizixun.papertrading.entity.User;
 import com.aizixun.papertrading.exception.ClientRequestException;
 import com.aizixun.papertrading.model.MarketSnapshot;
@@ -23,6 +24,7 @@ import com.aizixun.papertrading.model.StockChartElement;
 import com.aizixun.papertrading.model.StockInfo;
 import com.aizixun.papertrading.service.HoldingService;
 import com.aizixun.papertrading.service.IEXCloudService;
+import com.aizixun.papertrading.service.OrderService;
 import com.aizixun.papertrading.service.UserService;
 
 import reactor.core.publisher.Flux;
@@ -34,12 +36,14 @@ public class PapertradingRestController {
 	private UserService userService;
 	private HoldingService holdingService; 
 	private IEXCloudService iexCloudService;
+	private OrderService orderService; 
 	
 	@Autowired 
-	public PapertradingRestController(UserService userService, HoldingService holdingService, IEXCloudService iexCloudService) {
+	public PapertradingRestController(UserService userService, HoldingService holdingService, IEXCloudService iexCloudService, OrderService orderService) {
 		this.userService = userService; 
 		this.holdingService = holdingService; 
 		this.iexCloudService = iexCloudService; 
+		this.orderService = orderService; 
 	}
 	
 	
@@ -103,6 +107,16 @@ public class PapertradingRestController {
 	public MarketSnapshot stockIndex(@RequestParam(name = "token") String token) {
 		return iexCloudService.getMarketSnapshot(token); 
 	}
+	
+	@GetMapping("/order/categorized")
+	public Map<String, List<Order>> orderCategorized(@RequestParam(name = "token") String token) {
+		try {
+			return orderService.findByUserIdCategorized(token); 
+		}
+		catch (ClientRequestException e) {
+	        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	} 
 	
 	@GetMapping("/user/email_exist")
 	public boolean userEmailExist(@RequestParam(name = "user_email") String userEmail) {
