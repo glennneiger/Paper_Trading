@@ -28,20 +28,29 @@ public class Order {
 	@Column(name="action_type")
 	private String actionType;
 	
+	@Column(name="price_type")
+	private String priceType;
+	
 	@Column(name="status_type")
 	private String statusType;
 	
 	@Column(name="quantity")
 	private int quantity; 
 	
+	@Column(name="limit_price")
+	private Double limitPrice;
+	
+	@Column(name="stop_price")
+	private Double stopPrice;
+	
 	@Column(name="price_paid")
-	private double price_paid;
+	private Double pricePaid;
 	
 	@Column(name="commission")
-	private double commission;
+	private Double commission;
 	
 	@Column(name="total")
-	private double total;
+	private Double total;
 	
 	@Column(name="order_date")
 	private Timestamp orderDate; 
@@ -52,7 +61,7 @@ public class Order {
 	public Order() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -69,6 +78,10 @@ public class Order {
 		return actionType;
 	}
 
+	public String getPriceType() {
+		return priceType;
+	}
+
 	public String getStatusType() {
 		return statusType;
 	}
@@ -77,15 +90,23 @@ public class Order {
 		return quantity;
 	}
 
-	public double getPrice_paid() {
-		return price_paid;
+	public Double getLimitPrice() {
+		return limitPrice;
 	}
 
-	public double getCommission() {
+	public Double getStopPrice() {
+		return stopPrice;
+	}
+
+	public Double getPricePaid() {
+		return pricePaid;
+	}
+
+	public Double getCommission() {
 		return commission;
 	}
 
-	public double getTotal() {
+	public Double getTotal() {
 		return total;
 	}
 
@@ -113,6 +134,10 @@ public class Order {
 		this.actionType = actionType;
 	}
 
+	public void setPriceType(String priceType) {
+		this.priceType = priceType;
+	}
+
 	public void setStatusType(String statusType) {
 		this.statusType = statusType;
 	}
@@ -121,15 +146,23 @@ public class Order {
 		this.quantity = quantity;
 	}
 
-	public void setPrice_paid(double price_paid) {
-		this.price_paid = price_paid;
+	public void setLimitPrice(Double limitPrice) {
+		this.limitPrice = limitPrice;
 	}
 
-	public void setCommission(double commission) {
+	public void setStopPrice(Double stopPrice) {
+		this.stopPrice = stopPrice;
+	}
+
+	public void setPricePaid(Double pricePaid) {
+		this.pricePaid = pricePaid;
+	}
+
+	public void setCommission(Double commission) {
 		this.commission = commission;
 	}
 
-	public void setTotal(double total) {
+	public void setTotal(Double total) {
 		this.total = total;
 	}
 
@@ -140,8 +173,8 @@ public class Order {
 	public void setTradeDate(Timestamp tradeDate) {
 		this.tradeDate = tradeDate;
 	}
-
-
+	
+	
 	
 
 }
