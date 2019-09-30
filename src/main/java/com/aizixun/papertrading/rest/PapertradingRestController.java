@@ -165,6 +165,16 @@ public class PapertradingRestController {
 		return userService.userSignUp(userFirstName, userLastName, userEmail, userPassword); 
 	}
 	
+	@PostMapping("/order/cancel")
+	public Order orderCancel(@RequestBody Map<String, Object> body) {
+		String token = (String) body.get("token");
+		int orderId = (int) body.get("orderId");
+		try {
+			return orderService.cancelByOrderId(token, orderId );
+		} catch (ClientRequestException e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
 	
 
 }

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.aizixun.papertrading.entity.User;
 import com.aizixun.papertrading.exception.ClientRequestException;
-import com.aizixun.papertrading.model.MarketSnapshot;
 import com.aizixun.papertrading.model.Portfolio;
 
 public interface UserService {

@@ -41,7 +41,7 @@ CREATE TABLE order_table (
     limit_price DOUBLE(20, 4),
     stop_price DOUBLE(20, 4),
     price_paid DOUBLE(20, 4), 
-    commission DOUBLE(20, 4) NOT NULL, 
+    commission DOUBLE(20, 4), 
     total DOUBLE(20, 4), 
     order_date TIMESTAMP,
     trade_date TIMESTAMP, 
@@ -67,7 +67,8 @@ VALUES  (DEFAULT, 1, "GOOGL", "buy", "market", "executed", 100, NULL, NULL, 1215
         (DEFAULT, 1, "QQQ", "buy", "market", "executed", 100, NULL, NULL, 170.12, 4.95, -17016.95, "2019-06-03T20:18:03.000+0000", "2019-06-03T20:18:03.000+0000"),
         (DEFAULT, 1, "BILI", "buy", "market", "executed", 2000, NULL, NULL, 14.36, 4.95, -28724.95, "2019-06-17T22:18:03.000+0000", "2019-06-17T22:18:03.000+0000"),
         (DEFAULT, 1, "BABA", "buy", "market", "executed", 100, NULL, NULL, 172.99, 4.95, -17303.95, "2019-07-19T20:18:03.000+0000", "2019-07-19T20:18:03.000+0000"),
-        (DEFAULT, 1, "V", "buy", "limit", "open", 100,  110.50, NULL, NULL, 4.95, NULL, "2019-07-19T20:18:03.000+0000", NULL);
+        (DEFAULT, 1, "V", "buy", "limit", "open", 100,  110.50, NULL, NULL, 4.95, NULL, "2019-07-19T20:18:03.000+0000", NULL),
+        (DEFAULT, 1, "BABA", "buy", "limit", "cancelled", 100,  110.50, NULL, NULL, NULL, NULL, "2019-07-19T20:18:03.000+0000", "2019-07-24T20:18:03.000+0000");
 
 
 /* Fatch Data */

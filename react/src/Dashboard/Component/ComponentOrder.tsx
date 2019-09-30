@@ -1,9 +1,10 @@
 import React, { ReactFragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, ButtonGroup, Table, TableBody, TableCell, TableHead, TableRow, Typography, Grid } from '@material-ui/core';
+import { Button, ButtonGroup, Table, TableBody, TableCell, TableHead, TableRow, Typography, Grid, Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText, Slide } from '@material-ui/core';
 import HTTPClient from '../../HTTPClient/HTTPClient';
 import Order from '../Interface/OrderInterface';
 import Utils from '../Utils/Utils';
+import { TransitionProps } from 'react-transition-group/Transition';
 
 interface Props {
     token: string;
@@ -26,14 +27,20 @@ const toCommas: (value: string) => string = (value) => {
     return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-
-
-
 const ComponentPortfolio: React.FC<Props> = props => {
     const classes = useStyles();
     const [order, setOrder] = React.useState<Order | null>(null);
     const [type, setType] = React.useState<'open' | 'executed' | 'cancelled'>('open');
+    const [open, setOpen] = React.useState(false);
 
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+  
     React.useEffect(() => {
         HTTPClient
             .getOrder(props.token)
@@ -48,62 +55,93 @@ const ComponentPortfolio: React.FC<Props> = props => {
             });
     }, []);
 
+    const cancelOrder: (token: string, orderId: number) => void = (token, orderId) => {
+        setOpen(true); 
+    }
+
 
     const constructTable: () => ReactFragment | null = () => {
         if (order !== null) {
             /* ========= OPEN ========= */
             if (type === 'open') {
                 return (
-                    <Table size="small">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Symbol</TableCell>
-                                <TableCell>Action</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell align="right">Qty #</TableCell>
-                                <TableCell align="right">Limit Price $</TableCell>
-                                <TableCell align="right">Stop Price $</TableCell>
-                                <TableCell align="right">Commission $</TableCell>
-                                <TableCell align="right">Order Date</TableCell>
-                                <TableCell align="right">Cancel</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {order.open.map(orderElement => (
-                                <TableRow key={orderElement.id}>
-                                    <TableCell>
-                                        {orderElement.stockSymbol}
-                                    </TableCell>
-                                    <TableCell>
-                                        {orderElement.actionType.toLocaleUpperCase()}
-                                    </TableCell>
-                                    <TableCell>
-                                        {orderElement.statusType.toLocaleUpperCase()}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {orderElement.quantity}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {orderElement.limitPrice}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {orderElement.stopPrice === null ? 'N/A' : orderElement.stopPrice}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {orderElement.commission}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {orderElement.orderDate.substring(0, 10)}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <Button size="small" color="secondary" className={classes.button}>
-                                            Cancel
-                                        </Button>
-                                    </TableCell>
+                    <div>
+                        <Dialog
+                            open={open}
+                            keepMounted
+                            onClose={handleClose}
+                        >
+                            <DialogTitle id="alert-dialog-slide-title">Cancel order?</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-slide-description">
+                                    Please confirm that you are cancelling? The action cannot be undone. 
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose} color="primary">
+                                    No
+                                </Button>
+                                <Button onClick={handleClose} color="primary">
+                                    Yes
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Symbol</TableCell>
+                                    <TableCell>Action</TableCell>
+                                    <TableCell>Status</TableCell>
+                                    <TableCell align="right">Qty #</TableCell>
+                                    <TableCell align="right">Limit Price $</TableCell>
+                                    <TableCell align="right">Stop Price $</TableCell>
+                                    <TableCell align="right">Commission $</TableCell>
+                                    <TableCell align="right">Order Date</TableCell>
+                                    <TableCell align="right">Cancel</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHead>
+                            <TableBody>
+                                {order.open.map(orderElement => (
+                                    <TableRow key={orderElement.id}>
+                                        <TableCell>
+                                            {orderElement.stockSymbol}
+                                        </TableCell>
+                                        <TableCell>
+                                            {orderElement.actionType.toLocaleUpperCase()}
+                                        </TableCell>
+                                        <TableCell>
+                                            {orderElement.statusType.toLocaleUpperCase()}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {orderElement.quantity}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {orderElement.limitPrice}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {orderElement.stopPrice === null ? 'N/A' : orderElement.stopPrice}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {orderElement.commission}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {orderElement.orderDate.substring(0, 10)}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <Button
+                                                size="small"
+                                                color="secondary"
+                                                className={classes.button}
+                                                onClick={() => { cancelOrder(props.token, orderElement.id) }}
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
                 );
             }
             /* ========= EXECUTED ========= */
@@ -245,6 +283,7 @@ const ComponentPortfolio: React.FC<Props> = props => {
                 </Grid>
             </Grid>
             {constructTable()}
+            
         </React.Fragment>
     );
 }

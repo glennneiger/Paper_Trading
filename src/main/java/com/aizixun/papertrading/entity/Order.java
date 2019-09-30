@@ -1,7 +1,7 @@
 package com.aizixun.papertrading.entity;
 
 import java.sql.Timestamp;
-import java.util.Comparator;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -60,6 +60,14 @@ public class Order {
 	
 	public Order() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public void cancel() {
+		statusType = "cancelled";
+		Date date= new Date();
+		Timestamp tradeDate = new Timestamp(date.getTime()); 
+		this.commission = null; 
+		this.tradeDate = tradeDate;
 	}
 
 	public int getId() {

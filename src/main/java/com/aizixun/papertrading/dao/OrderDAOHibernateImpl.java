@@ -5,12 +5,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.aizixun.papertrading.entity.Order;
-import com.aizixun.papertrading.entity.User;
 
 @Repository
 public class OrderDAOHibernateImpl implements OrderDAO {
@@ -20,6 +20,19 @@ public class OrderDAOHibernateImpl implements OrderDAO {
 	@Autowired
 	public OrderDAOHibernateImpl(EntityManager entityManager) {
 		this.entityManager = entityManager; 
+	}
+	
+	@Override 
+	public Order findById(int id) {
+		Session currentSession = entityManager.unwrap(Session.class);
+		Order order = currentSession.get(Order.class, id);
+		return order;
+	}
+	
+	@Override 
+	public void save(Order order) {
+		Session currentSession = entityManager.unwrap(Session.class);
+		currentSession.saveOrUpdate(order); 
 	}
 	
 	@Override

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.aizixun.papertrading.dao.OrderDAO;
 import com.aizixun.papertrading.entity.Order;
@@ -26,13 +27,14 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	@Transactional
 	public List<Order> findByUserId(String token) throws ClientRequestException {
 		int userId = jwtTokenService.getUserIdFromToken(token);
 		return orderDAO.findByUserId(userId);
 	}
 	
-
-	
+	@Override
+	@Transactional
 	public Map<String, List<Order>> findByUserIdCategorized(String token) throws ClientRequestException {
 		int userId = jwtTokenService.getUserIdFromToken(token);
 		List<Order> orderList =  orderDAO.findByUserId(userId);
@@ -69,6 +71,24 @@ public class OrderServiceImpl implements OrderService {
 		orderListCancelled.sort(tradeDateComparator);
 		
 		return result; 
+	}
+	
+	@Override
+	@Transactional
+	public void save(Order order) {
+		orderDAO.save(order);
+	}
+	
+	@Override
+	@Transactional
+	public Order cancelByOrderId(String token, int orderId) throws ClientRequestException {
+		int userId = jwtTokenService.getUserIdFromToken(token);
+		Order order = orderDAO.findById(orderId); 
+		if (order.getUserId() != userId) throw new ClientRequestException("invalid-id");
+		if (!order.getStatusType().equals("open")) throw new ClientRequestException("non-open-order");
+		order.cancel();
+		save(order);
+		return order;
 	}
 
 }

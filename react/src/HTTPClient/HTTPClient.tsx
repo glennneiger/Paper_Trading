@@ -96,6 +96,15 @@ const postOrder: (token: string, symbol: string, quantity: number, sale: boolean
         .then(response => {return response.data});
 }
 
+const postOrderCancel: (token: string, orderId: string) => Promise<any> = (token, orderId) => {
+    let data = {
+        token: token,
+        orderId: orderId, 
+    }
+    return axios.post(API_URL + '/api/order/cancel', data)
+        .then(response => {return response.data});
+}
+
 export default {
     getUserEmailExist, 
     getUserPortfolio, 
@@ -105,5 +114,6 @@ export default {
     getOrder,
     postUserSignIn, 
     postUserSignUp,
-    postOrder
+    postOrder, 
+    postOrderCancel
 };
