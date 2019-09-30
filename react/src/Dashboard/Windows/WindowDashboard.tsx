@@ -10,6 +10,8 @@ import ComponentUSMarketChart from '../Component/ComponentUSMarketChart';
 import HTTPClient from '../../HTTPClient/HTTPClient';
 import Portfolio from '../Interface/PortfolioInterface';
 import PortfolioHolding from '../Interface/PortfolioHoldingInterface';
+import StockQuote from '../Interface/StockQuoteInterface'; 
+import StockIndex from '../Interface/StockIndexInterface';
 
 const useStyles = makeStyles(theme => ({
 
@@ -44,6 +46,7 @@ const WindowDashboard: React.FC<Props> = props => {
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     const [portfolio, setPortfolio] = React.useState<Portfolio | null>(null);
+    const [stockIndex, setStockIndex] = React.useState<StockIndex | null>(null); 
 
     React.useEffect(() => {
         HTTPClient
@@ -56,6 +59,18 @@ const WindowDashboard: React.FC<Props> = props => {
                     }
                 }
                 setPortfolio(null);
+            });
+        
+        HTTPClient
+            .getStockIndex(props.token)
+            .then(response => setStockIndex(response))
+            .catch(error => {
+                if (error.response !== undefined) {
+                    if (error.response.status === 500 && error.response.data.message === 'invalid-token'){
+                        props.signOut(true);
+                    }
+                }
+                setStockIndex(null);
             });
     }, []);
     
@@ -81,12 +96,16 @@ const WindowDashboard: React.FC<Props> = props => {
                     </Grid>
                     <Grid item xs={12} md={8} lg={8}>
                         <Paper className={fixedHeightPaper}>
-                            <ComponentUSMarketChart />
+                            <ComponentUSMarketChart 
+                                stockIndex={stockIndex} 
+                            />
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={4} lg={4}>
                         <Paper className={fixedHeightPaper}>
-                            <ComponentUSMarket />
+                            <ComponentUSMarket 
+                                stockQuote={stockIndex !== null ? stockIndex.stockQuote : null} 
+                            />
                         </Paper>
                     </Grid>
                 </Grid>

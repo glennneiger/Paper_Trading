@@ -59,7 +59,7 @@ public class IEXCloudServiceImpl implements IEXCloudService {
 	
 	@Override
 	public Flux<StockChartElement> getStockChart(String stockSymbol) {
-		String uri = url +  "/stock/" + stockSymbol + "/chart/1m?token=" + token; 
+		String uri = url +  "/stock/" + stockSymbol + "/chart/3m?token=" + token; 
 		return webClient.get()
                 		.uri(uri)
                 		.exchange()

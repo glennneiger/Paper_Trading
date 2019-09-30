@@ -34,6 +34,16 @@ const getStockInfo: (token: string, symbol: string) => Promise<any> = (token, sy
         .then(response => {return response.data});
 }
 
+const getStockIndex: (token: string) => Promise<any> = (token) => {
+    let params = {
+        params: {
+            token: token
+        }
+    }
+    return axios.get(API_URL + '/api/stock/index', params)
+        .then(response => {return response.data});
+}
+
 const postUserSignIn: (email: string, password: string) => Promise<any> = (email, password) => {
     let data = {
         user_email: email,
@@ -69,6 +79,7 @@ export default {
     getUserEmailExist, 
     getUserPortfolio, 
     getStockInfo, 
+    getStockIndex,
     postUserSignIn, 
     postUserSignUp,
     postOrder
