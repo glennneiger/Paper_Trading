@@ -57,12 +57,6 @@ const Menu: React.FC<Props> = props => {
                     </ListItemIcon>
                     <ListItemText primary="Order" className={classes.listItemText} />
                 </ListItem>
-                <ListItem button onClick={() => {props.setWindow('transaction')}}>
-                    <ListItemIcon className={classes.listItemIcon}>
-                        <PlaylistAddCheckIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Transaction" className={classes.listItemText} />
-                </ListItem>
             </div>
         </div>
     );

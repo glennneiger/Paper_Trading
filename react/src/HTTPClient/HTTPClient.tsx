@@ -44,6 +44,27 @@ const getStockIndex: (token: string) => Promise<any> = (token) => {
         .then(response => {return response.data});
 }
 
+const getStockChart: (token: string, symbol: string) => Promise<any> = (token, symbol) => {
+    let params = {
+        params: {
+            token: token,
+            symbol: symbol
+        }
+    }
+    return axios.get(API_URL + '/api/stock/chart', params)
+        .then(response => {return response.data});
+}
+
+const getOrder: (token: string) => Promise<any> = (token) => {
+    let params = {
+        params: {
+            token: token,
+        }
+    }
+    return axios.get(API_URL + '/api/order/categorized', params)
+        .then(response => {return response.data});
+}
+
 const postUserSignIn: (email: string, password: string) => Promise<any> = (email, password) => {
     let data = {
         user_email: email,
@@ -80,6 +101,8 @@ export default {
     getUserPortfolio, 
     getStockInfo, 
     getStockIndex,
+    getStockChart, 
+    getOrder,
     postUserSignIn, 
     postUserSignUp,
     postOrder

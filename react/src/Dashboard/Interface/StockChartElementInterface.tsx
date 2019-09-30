@@ -1,4 +1,4 @@
-interface StockChartElementInterface {
+interface StockChartElement {
     date: string; 
     open: number; 
     close: number;
@@ -7,4 +7,4 @@ interface StockChartElementInterface {
     volume: number;
 }
 
-export default StockChartElementInterface; 
+export default StockChartElement; 

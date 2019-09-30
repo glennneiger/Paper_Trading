@@ -92,10 +92,7 @@ public class PapertradingRestController {
 		}
 	}
 	
-	@GetMapping("/stock/chart/{stockSymbol}")
-	public Flux<StockChartElement> getq(@PathVariable String stockSymbol) {
-		return iexCloudService.getStockChart(stockSymbol); 
-	}
+
 	
 	// --------- Official & In Use ----------
 	@GetMapping("/stock/info")
@@ -106,6 +103,11 @@ public class PapertradingRestController {
 	@GetMapping("/stock/index")
 	public MarketSnapshot stockIndex(@RequestParam(name = "token") String token) {
 		return iexCloudService.getMarketSnapshot(token); 
+	}
+	
+	@GetMapping("/stock/chart")
+	public Flux<StockChartElement> stockChart(@RequestParam(name = "token") String token, @RequestParam(name = "symbol") String stockSymbol) {
+		return iexCloudService.getStockChart(stockSymbol); 
 	}
 	
 	@GetMapping("/order/categorized")

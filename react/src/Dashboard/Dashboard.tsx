@@ -9,6 +9,8 @@ import Menu from './Menu';
 import WindowDashboard from './Windows/WindowDashboard';
 import WindowPortfolio from './Windows/WindowPortfolio';
 import WindowTrade from './Windows/WindowTrade';
+import WindowQuote from './Windows/WindowQuote';
+import WindowOrder from './Windows/WindowOrder';
 
 
 const drawerWidth = 240;
@@ -109,7 +111,7 @@ interface Props {
 const Dashboard: React.FC<Props> = props => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
-    const [window, setWindow] = React.useState('dashboard');
+    const [window, setWindow] = React.useState('order');
 
     console.log("Dashboard - Render")
 
@@ -148,6 +150,13 @@ const Dashboard: React.FC<Props> = props => {
                         signOut={props.signOut}
                     />
                 );
+            case 'quote':
+                return (
+                    <WindowQuote
+                        token={props.token}
+                        signOut={props.signOut}
+                    />
+                );
             case 'trade':
                 return (
                     <WindowTrade
@@ -155,6 +164,13 @@ const Dashboard: React.FC<Props> = props => {
                         signOut={props.signOut}
                     />
                 );
+            case 'order':
+                return (
+                    <WindowOrder
+                        token={props.token}
+                        signOut={props.signOut}
+                    />
+                    );
             default:
                 return (
                     <WindowDashboard

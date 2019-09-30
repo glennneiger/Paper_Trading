@@ -3,8 +3,9 @@ import clsx from 'clsx';
 import { Container, Grid, Paper, } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import Copyright from '../../Copyright/Copyright';
-import ComponentTrade from '../Component/ComponentTrade';
+import ComponentSymbol from '../Component/ComponentSymbol';
 import ComponentTradeData from '../Component/ComponentTradeData';
+import ComponentStockChart from '../Component/ComponentStockChart';
 
 const useStyles = makeStyles(theme => ({
     appBarSpacer: theme.mixins.toolbar,
@@ -26,6 +27,22 @@ const useStyles = makeStyles(theme => ({
     fixedHeight: {
         height: '70vh',
     },
+    stockSymbolPaper: {
+        padding: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+        height: '20vh',
+    },
+    stockChartPaper: {
+        padding: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
+        height: '65vh',
+    }
 }));
 
 interface Props {
@@ -48,17 +65,26 @@ const WindowQuote: React.FC<Props> = props => {
             <div className={classes.appBarSpacer} />
             <Container maxWidth="lg" className={classes.container}>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} md={5} lg={5}>
-                        <Paper className={fixedHeightPaper}>
-
-                        </Paper>
-                    </Grid>
                     <Grid item xs={12} md={7} lg={7}>
-                        <Paper className={fixedHeightPaper}>
+                        <Paper className={classes.stockSymbolPaper}>
+                            <ComponentSymbol
+                                symbol={symbol}
+                                setSymbol={setSymbol}
+                            />
+                        </Paper>
+                        <Paper className={classes.paper}>
                             <ComponentTradeData
                                 token={props.token}
                                 symbol={symbol}
                                 signOut={props.signOut}
+                            />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={5} lg={5}>
+                        <Paper className={classes.stockChartPaper}>
+                            <ComponentStockChart
+                                token={props.token}
+                                symbol={symbol}
                             />
                         </Paper>
                     </Grid>

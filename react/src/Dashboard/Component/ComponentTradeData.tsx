@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, ListItemText, Divider, GridList, Typography } from '@material-ui/core';
 import HTTPClient from '../../HTTPClient/HTTPClient';
 import { symbol } from 'prop-types';
+import Utils from '../Utils/Utils';
 
 interface Props {
     token: string;
@@ -104,28 +105,28 @@ const ComponentTradeData: React.FC<Props> = props => {
                     <ListItem>
                         <ListItemText primary="P/E (TTM)" />
                         <ListItemText 
-                            secondary={stockInfo === null? "NOT AVALIABLE" : stockInfo.stockStats.peRatio}  
+                            secondary={stockInfo === null? "NOT AVALIABLE" : Utils.formatNumber(stockInfo.stockStats.peRatio) }  
                             className={classes.listItemText} 
                         />
                     </ListItem>
                     <ListItem>
                         <ListItemText primary="EPS (TTM)" />
                         <ListItemText 
-                            secondary={stockInfo === null? "NOT AVALIABLE" : stockInfo.stockStats.ttmEPS}  
+                            secondary={stockInfo === null? "NOT AVALIABLE" : Utils.formatNumber(stockInfo.stockStats.ttmEPS) }  
                             className={classes.listItemText} 
                         />
                     </ListItem>
                     <ListItem>
                         <ListItemText primary="Beta" />
                         <ListItemText 
-                            secondary={stockInfo === null? "NOT AVALIABLE" : stockInfo.stockStats.beta}  
+                            secondary={stockInfo === null? "NOT AVALIABLE" : Utils.formatNumber(stockInfo.stockStats.beta) }  
                             className={classes.listItemText} 
                         />
                     </ListItem>
                     <ListItem>
                         <ListItemText primary="Market Capitalization" />
                         <ListItemText 
-                            secondary={stockInfo === null? "NOT AVALIABLE" : stockInfo.stockStats.marketcap}  
+                            secondary={stockInfo === null? "NOT AVALIABLE" : Utils.formatNumber(stockInfo.stockStats.marketcap) }  
                             className={classes.listItemText} 
                         />
                     </ListItem>
@@ -150,14 +151,14 @@ const ComponentTradeData: React.FC<Props> = props => {
                     <ListItem>
                         <ListItemText primary="Change $" />
                         <ListItemText 
-                            secondary={stockInfo === null? "NOT AVALIABLE" : stockInfo.stockQuote.change} 
+                            secondary={stockInfo === null? "NOT AVALIABLE" : stockInfo.stockQuote.change } 
                             className={classes.listItemText} 
                         />
                     </ListItem>
                     <ListItem>
                         <ListItemText primary="Change %" />
                         <ListItemText 
-                            secondary={stockInfo === null? "NOT AVALIABLE" : stockInfo.stockQuote.changePercent} 
+                            secondary={stockInfo === null? "NOT AVALIABLE" : Utils.formatNumber(stockInfo.stockQuote.changePercent* 100) + '%' } 
                             className={classes.listItemText} 
                         />
                     </ListItem>
