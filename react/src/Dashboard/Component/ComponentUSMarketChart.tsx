@@ -37,20 +37,27 @@ const ComponentUSMarketChart: React.FC<Props> = props => {
     console.log(data); 
 
 
+
+
+
     return (
         <React.Fragment>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
                 Market Snapshot {/* -- TODO -- */}
             </Typography>
+            {
+                props.stockIndex === null ? null : (
+                    <Chart
+                        width={'700px'}
+                        height={'250px'}
+                        chartType="Line"
+                        loader={<div>Loading Chart</div>}
+                        data={data}
+                        rootProps={{ 'data-testid': '3' }}
+                    />
+                ) 
+            }
 
-            <Chart
-                width={'700px'}
-                height={'250px'}
-                chartType="Line"
-                loader={<div>Loading Chart</div>}
-                data={data}
-                rootProps={{ 'data-testid': '3' }}
-            />
         </React.Fragment>
     );
 }

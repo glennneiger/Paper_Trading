@@ -7,7 +7,6 @@ import ComponentTrade from '../Component/ComponentTrade';
 import ComponentTradeData from '../Component/ComponentTradeData';
 
 const useStyles = makeStyles(theme => ({
-
     appBarSpacer: theme.mixins.toolbar,
     content: {
         flexGrow: 1,
@@ -34,7 +33,7 @@ interface Props {
     token: string;
 }
 
-const WindowTrade: React.FC<Props> = props => {
+const WindowQuote: React.FC<Props> = props => {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -51,12 +50,7 @@ const WindowTrade: React.FC<Props> = props => {
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={5} lg={5}>
                         <Paper className={fixedHeightPaper}>
-                            <ComponentTrade
-                                token={props.token}
-                                symbol={symbol}
-                                setSymbol={setSymbol}
-                                signOut={props.signOut}
-                            />
+
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={7} lg={7}>
@@ -75,4 +69,4 @@ const WindowTrade: React.FC<Props> = props => {
     );
 }
 
-export default WindowTrade; 
+export default WindowQuote; 
