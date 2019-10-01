@@ -7,8 +7,7 @@ import Dashboard from './Dashboard/Dashboard';
 const App: React.FC = () => {
 
     const [page, setPage] = React.useState<string>('dashboard');
-    const [id, setId] = React.useState<number>(0);
-    const [token, setToken] = React.useState<string>('eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInVsbiI6IkJhcnJvbiIsInVmbiI6Ikpvc2VmZiIsInVlbSI6ImFkbWluQGFkbWluLmNvbSIsImV4cCI6MTU2OTg5MDI4NywiaWF0IjoxNTY5ODAyNDQ3OTYwfQ.mhx4Ok5wgGnzbutrf45n_tukBxUzZO_iKeGF0KywBQBeTQcN2SuqeOWNnSwK3-pUtT2KYnuwc_rnE5SHW7STaw');
+    const [token, setToken] = React.useState<string>('eyJhbGciOiJIUzUxMiJ9.eyJ1aWQiOjEsInVsbiI6IkJhcnJvbiIsInVmbiI6Ikpvc2VmZiIsInVlbSI6ImFkbWluQGFkbWluLmNvbSIsImV4cCI6MTU3MDAzMjAzMSwiaWF0IjoxNTY5OTQ0MTkxMzE5fQ.TLAYOViecyxZg8HJlLDv1vKQM6YOr4HHeXa6PLER7s9-C25IWD3UI-dpeWeGESr7wPspnmGK4uGgeGR60eQwYQ');
 
     const signOut: (sessionExpired: boolean) => void = (sessionExpired) => {
         setToken('');

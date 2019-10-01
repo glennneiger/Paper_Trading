@@ -149,6 +149,7 @@ public class PapertradingRestController {
 		}
 	}
 	
+	
 	@PostMapping("/user/sign_in")
 	public Map<String, Object> userSignIn(@RequestBody Map<String, Object> body) {
 		String userEmail = (String) body.get("user_email"); 
@@ -163,6 +164,20 @@ public class PapertradingRestController {
 		String userPassword = (String) body.get("user_password"); 
 		String userEmail = (String) body.get("user_email"); 
 		return userService.userSignUp(userFirstName, userLastName, userEmail, userPassword); 
+	}
+	
+	@PostMapping("/order/new")
+	public void orderNew(@RequestBody Map<String, Object> body) {
+		String token = (String) body.get("token"); 
+		String symbol = (String) body.get("symbol"); 
+		int quantity = (int) body.get("quantity");
+		boolean sale = (boolean) body.get("sale"); 
+		try {
+			orderService.orderNew(token, symbol, quantity, sale); 
+		}
+		catch (ClientRequestException e) {
+	        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 	
 	@PostMapping("/order/cancel")

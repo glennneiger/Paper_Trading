@@ -62,6 +62,15 @@ public class Order {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Order(int userId, String stockSymbol, String actionType, String statusType, int quantity, Double limitPrice, Double stopPrice, Double pricePaid, Double commission, Double total, Timestamp orderDate, Timestamp tradeDate) {
+		this.userId = userId;
+		this.stockSymbol = stockSymbol;
+		this.actionType = actionType;
+		this.statusType = statusType; 
+		this.quantity = quantity; 
+		
+	}
+	
 	public void cancel() {
 		statusType = "cancelled";
 		Date date= new Date();

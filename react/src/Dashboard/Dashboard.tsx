@@ -111,7 +111,7 @@ interface Props {
 const Dashboard: React.FC<Props> = props => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
-    const [window, setWindow] = React.useState('order');
+    const [window, setWindow] = React.useState('trade');
 
     console.log("Dashboard - Render")
 
@@ -127,8 +127,6 @@ const Dashboard: React.FC<Props> = props => {
                 return ('Trade');
             case 'order':
                 return ('Current Orders');
-            case 'transaction':
-                return ('Past Transactions');
             default:
                 return ('Dashboard');
         }

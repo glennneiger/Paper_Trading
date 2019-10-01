@@ -11,4 +11,5 @@ public interface OrderService {
 	public Map<String, List<Order>> findByUserIdCategorized(String token) throws ClientRequestException;  
 	public void save(Order order); 
 	public Order cancelByOrderId(String token, int orderId) throws ClientRequestException; 
+	public void orderNew(String token, String symbol, int quantity, boolean sale) throws ClientRequestException;
 }

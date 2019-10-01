@@ -31,34 +31,23 @@ const ComponentPortfolio: React.FC<Props> = props => {
     const classes = useStyles();
     const [order, setOrder] = React.useState<Order | null>(null);
     const [type, setType] = React.useState<'open' | 'executed' | 'cancelled'>('open');
-    const [open, setOpen] = React.useState(false);
+    const [openCancelDialog, setOpenCancelDialog] = React.useState<boolean>(false);
+    const [orderCancelId, setOrderCancelId] = React.useState<number>(0);
 
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
-  
+
     React.useEffect(() => {
         HTTPClient
-            .getOrder(props.token)
-            .then(response => setOrder(response))
-            .catch(error => {
-                if (error.response !== undefined) {
-                    if (error.response.status === 500 && error.response.data.message === 'invalid-token') {
-                        props.signOut(true);
-                    }
+        .getOrder(props.token)
+        .then(response => setOrder(response))
+        .catch(error => {
+            if (error.response !== undefined) {
+                if (error.response.status === 500 && error.response.data.message === 'invalid-token') {
+                    props.signOut(true);
                 }
-                setOrder(null);
-            });
+            }
+            setOrder(null);
+        }); 
     }, []);
-
-    const cancelOrder: (token: string, orderId: number) => void = (token, orderId) => {
-        setOpen(true); 
-    }
-
 
     const constructTable: () => ReactFragment | null = () => {
         if (order !== null) {
@@ -67,9 +56,9 @@ const ComponentPortfolio: React.FC<Props> = props => {
                 return (
                     <div>
                         <Dialog
-                            open={open}
+                            open={openCancelDialog}
                             keepMounted
-                            onClose={handleClose}
+                            onClose={() => {setOrderCancelId(0); setOpenCancelDialog(false);}}
                         >
                             <DialogTitle id="alert-dialog-slide-title">Cancel order?</DialogTitle>
                             <DialogContent>
@@ -78,10 +67,33 @@ const ComponentPortfolio: React.FC<Props> = props => {
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={handleClose} color="primary">
+                                <Button onClick={() => {setOrderCancelId(0); setOpenCancelDialog(false);}} color="primary">
                                     No
                                 </Button>
-                                <Button onClick={handleClose} color="primary">
+                                <Button 
+                                    onClick={() => {
+                                        setOrder(null);
+                                        HTTPClient
+                                            .postOrderCancel(props.token, orderCancelId)
+                                            .then(() => {
+                                                HTTPClient
+                                                    .getOrder(props.token)
+                                                    .then(response => {
+                                                        setOrder(response);
+                                                        setOpenCancelDialog(false);
+                                                    })
+                                                    .catch(error => {
+                                                        if (error.response !== undefined) {
+                                                            if (error.response.status === 500 && error.response.data.message === 'invalid-token') {
+                                                                props.signOut(true);
+                                                            }
+                                                        }
+                                                        setOrder(null);
+                                                    });
+                                            })
+                                    }} 
+                                    color="primary"
+                                >
                                     Yes
                                 </Button>
                             </DialogActions>
@@ -132,7 +144,7 @@ const ComponentPortfolio: React.FC<Props> = props => {
                                                 size="small"
                                                 color="secondary"
                                                 className={classes.button}
-                                                onClick={() => { cancelOrder(props.token, orderElement.id) }}
+                                                onClick={() => {setOrderCancelId(orderElement.id); setOpenCancelDialog(true);}}
                                             >
                                                 Cancel
                                             </Button>
