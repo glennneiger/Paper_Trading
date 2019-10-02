@@ -11,20 +11,17 @@ const App: React.FC = () => {
     const [token, setToken] = React.useState<string>('');
     const [cookies, setCookie] = useCookies(['token']);
 
-    console.log(cookies.token)
-
-
     React.useEffect(() => {
-        console.log("COOKIE TOKEN" + cookies.token);
-        if (cookies.token !== undefined || cookies.token !== null) {
+        if (cookies.token !== 'undefined' && cookies.token !== undefined && cookies.token !== null) {
             console.log("COOKIE TOKEN" + cookies.token)
             signIn(cookies.token);
-        }
+        } 
+
     }, []);
 
     const signOut: (sessionExpired: boolean) => void = (sessionExpired) => {
         setToken('');
-        setCookie('token', null);
+        setCookie('token', undefined);
         setPage('sign-in'); 
     }
 
