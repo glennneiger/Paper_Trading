@@ -1,5 +1,5 @@
 # Paper Trading Application
-## A Stock Trade Simulator 
+A Stock Trade Simulator 
 
 ## Deployment
 http://ai-zixun.com/paper-trading
