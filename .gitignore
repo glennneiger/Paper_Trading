@@ -1,3 +1,4 @@
 react/node_modules/*
 react/build/*
 target/*
+src/main/resources/application.properties
