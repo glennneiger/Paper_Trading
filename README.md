@@ -17,8 +17,8 @@ http://ai-zixun.com/paper-trading
 
 #### Back-End: Spring Boot + MySQL
 <p align="center">
-  <img src="readme_img/spring-boot.png" height="100" title="spring-boot">
-  <img src="readme_img/mysql.svg" height="100" title="mysql">
+  <img src="readme_img/icon-spring-boot.png" height="100" title="spring-boot">
+  <img src="readme_img/icon-mysql.svg" height="100" title="mysql">
 </p>
 
 #### Deployment: AWS Elastic Beanstalk + Docker 
