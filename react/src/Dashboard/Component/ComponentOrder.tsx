@@ -104,6 +104,7 @@ const ComponentPortfolio: React.FC<Props> = props => {
                                     <TableCell>Symbol</TableCell>
                                     <TableCell>Action</TableCell>
                                     <TableCell>Status</TableCell>
+                                    <TableCell>Price Type</TableCell>
                                     <TableCell align="right">Qty #</TableCell>
                                     <TableCell align="right">Limit Price $</TableCell>
                                     <TableCell align="right">Stop Price $</TableCell>
@@ -123,6 +124,9 @@ const ComponentPortfolio: React.FC<Props> = props => {
                                         </TableCell>
                                         <TableCell>
                                             {orderElement.statusType.toLocaleUpperCase()}
+                                        </TableCell>
+                                        <TableCell>
+                                            {orderElement.priceType.toLocaleUpperCase()}
                                         </TableCell>
                                         <TableCell align="right">
                                             {orderElement.quantity}
@@ -167,8 +171,7 @@ const ComponentPortfolio: React.FC<Props> = props => {
                                 <TableCell>Price Type</TableCell>
                                 <TableCell>Status</TableCell>
                                 <TableCell align="right">Qty #</TableCell>
-                                <TableCell align="right">Limit Price $</TableCell>
-                                <TableCell align="right">Stop Price $</TableCell>
+                                <TableCell align="right">Price Paid $</TableCell>
                                 <TableCell align="right">Commission $</TableCell>
                                 <TableCell align="right">Total $</TableCell>
                                 <TableCell align="right">Order Date</TableCell>
@@ -194,10 +197,7 @@ const ComponentPortfolio: React.FC<Props> = props => {
                                         {orderElement.quantity}
                                     </TableCell>
                                     <TableCell align="right">
-                                        {orderElement.limitPrice === null ? 'N/A' : orderElement.limitPrice}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {orderElement.stopPrice === null ? 'N/A' : orderElement.stopPrice}
+                                        {Utils.formatNumber(orderElement.pricePaid)}
                                     </TableCell>
                                     <TableCell align="right">
                                         {orderElement.commission}
