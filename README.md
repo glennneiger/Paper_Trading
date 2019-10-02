@@ -6,7 +6,7 @@ http://ai-zixun.com/paper-trading
 
 ## Web Technology Used in this project 
 
-#### Front-End: React.js + Material UI + JSX  
+#### Front-End: React.js + Material UI + CSS in JS (JSS) 
 <p align="center">
   <img src="readme_img/icon-react.png" height="100" title="react">
   <img src="readme_img/icon-material-ui.png" height="100" title="material-ui">
