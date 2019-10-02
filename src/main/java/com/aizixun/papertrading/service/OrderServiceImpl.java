@@ -266,32 +266,6 @@ public class OrderServiceImpl implements OrderService {
 		Order order = new Order(user.getId(), stockQuote.getSymbol(), ACTION_TYPE_BUY, PRICE_TYPE_MARKET, STATUS_TYPE_OPEN, quantity, null, null, null, - COMMISSION_BUY, null, timestamp, null);
 		saveNewOrder(order); 
 	}
-	/*
-	private void 
-		double totalPrice = stockQuote.getLatestPrice() * quantity; 
-
-			user.setCash(user.getCash() - totalPrice);
-			
-			Date date= new Date();
-			Timestamp tradeDate = new Timestamp(date.getTime()); 
-			Holding holding = holdingService.findByUserIdAndSymbol(user.getId(), stockQuote.getSymbol());
-			if (holding == null) {
-				holding = new Holding(user.getId(), stockQuote.getSymbol(), stockQuote.getLatestPrice(), quantity, tradeDate);
-				holdingService.save(holding);
-			}
-			else {
-				holding.setTradeDate(tradeDate);
-				int newQuantity = holding.getQuantity() + quantity;
-				double newPricePaid = (holding.getPricePaid() * holding.getQuantity() + totalPrice) / newQuantity;
-				holding.setQuantity(newQuantity);
-				holding.setPricePaid(newPricePaid);
-				holdingService.save(holding);
-			}
-			
-	}
-	
-	*/ 
-	
 	
 	private String marketOrder(int userId, String token, String symbol, String actionType, int quantity) throws ClientRequestException {
 		User user = userService.findById(userId);

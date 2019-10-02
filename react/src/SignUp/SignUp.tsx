@@ -54,7 +54,7 @@ const useStyles: (props?: any) => Record<string, string> = makeStyles(theme => (
 
 interface Props {
     setPage: React.Dispatch<React.SetStateAction<string>>;
-    setToken: React.Dispatch<React.SetStateAction<string>>;
+    signIn: (token: string) => void; 
 }
 
 const SignUp: React.FC<Props> = props => {
@@ -107,7 +107,7 @@ const SignUp: React.FC<Props> = props => {
                     setErrorOpen(true);
                 }
                 else {
-                    props.setToken(response.token);
+                    props.signIn(response.token);
                     props.setPage('dashboard');
                 }
             }
