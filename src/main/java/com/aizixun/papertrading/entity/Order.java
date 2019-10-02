@@ -62,12 +62,33 @@ public class Order {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Order(int userId, String stockSymbol, String actionType, String statusType, int quantity, Double limitPrice, Double stopPrice, Double pricePaid, Double commission, Double total, Timestamp orderDate, Timestamp tradeDate) {
+	public Order(
+			int userId, 
+			String stockSymbol, 
+			String actionType, 
+			String priceType, 
+			String statusType, 
+			int quantity, 
+			Double limitPrice, 
+			Double stopPrice, 
+			Double pricePaid, 
+			Double commission, 
+			Double total, 
+			Timestamp orderDate, 
+			Timestamp tradeDate){
 		this.userId = userId;
 		this.stockSymbol = stockSymbol;
 		this.actionType = actionType;
+		this.priceType = priceType; 
 		this.statusType = statusType; 
 		this.quantity = quantity; 
+		this.limitPrice = limitPrice;
+		this.stopPrice = stopPrice;
+		this.pricePaid = pricePaid; 
+		this.commission = commission;
+		this.total = total;
+		this.orderDate = orderDate;
+		this.tradeDate = tradeDate; 
 		
 	}
 	

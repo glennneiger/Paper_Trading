@@ -1,7 +1,8 @@
 import axios from 'axios'; 
+import { number } from 'prop-types';
 
-//const API_URL: string = `${window.location.protocol}//${window.location.host}`;
-const API_URL: string = 'http://localhost:5050';
+const API_URL: string = `${window.location.protocol}//${window.location.host}`;
+//const API_URL: string = 'http://localhost:5050';
 
 const getUserEmailExist: (email: string) => Promise<any> = (email) => {
     let params = {
@@ -85,14 +86,25 @@ const postUserSignUp: (firstName: string, lastName: string, email: string, passw
         .then(response => {return response.data});
 }
 
-const postOrder: (token: string, symbol: string, quantity: number, sale: boolean) => Promise<any> = (token, symbol, quantity, sale) => {
+const postOrder: (
+        token: string, 
+        symbol: string, 
+        actionType: string, 
+        priceType: string, 
+        quantity: number, 
+        limitPrice: null | number, 
+        stopPrice: null | number
+    ) => Promise<any> = (token, symbol, actionType, priceType, quantity, limitPrice, stopPrice) => {
     let data = {
         token: token,
         symbol: symbol,
+        actionType: actionType,
+        priceType: priceType, 
         quantity: quantity,
-        sale: sale,
+        limitPrice: limitPrice,
+        stopPrice: stopPrice 
     }
-    return axios.post(API_URL + '/api/user/order', data)
+    return axios.post(API_URL + '/api/order/new', data)
         .then(response => {return response.data});
 }
 

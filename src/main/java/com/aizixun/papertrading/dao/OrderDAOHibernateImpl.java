@@ -43,5 +43,14 @@ public class OrderDAOHibernateImpl implements OrderDAO {
 		List<Order> orderList = orderQuery.getResultList();
 		return orderList;
 	}
+	
+	@Override 
+	public List<Order> findByStatus(String status) {
+		Session currentSession = entityManager.unwrap(Session.class);
+		Query<Order> orderQuery = currentSession.createQuery("FROM Order order WHERE order.statusType =: statusType", Order.class);
+		orderQuery.setParameter("statusType", status);
+		List<Order> orderList = orderQuery.getResultList();
+		return orderList;
+	}
 
 }

@@ -111,7 +111,7 @@ interface Props {
 const Dashboard: React.FC<Props> = props => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
-    const [window, setWindow] = React.useState('trade');
+    const [window, setWindow] = React.useState('dashboard');
 
     console.log("Dashboard - Render")
 

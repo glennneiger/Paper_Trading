@@ -135,21 +135,6 @@ public class PapertradingRestController {
 		}
 	}
 	
-	@PostMapping("/user/order")
-	public void userOrder(@RequestBody Map<String, Object> body) {
-		String token = (String) body.get("token"); 
-		String symbol = (String) body.get("symbol"); 
-		int quantity = (int) body.get("quantity");
-		boolean sale = (boolean) body.get("sale"); 
-		try {
-			userService.userOrder(token, symbol, quantity, sale); 
-		}
-		catch (ClientRequestException e) {
-	        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
-	}
-	
-	
 	@PostMapping("/user/sign_in")
 	public Map<String, Object> userSignIn(@RequestBody Map<String, Object> body) {
 		String userEmail = (String) body.get("user_email"); 
@@ -170,10 +155,13 @@ public class PapertradingRestController {
 	public void orderNew(@RequestBody Map<String, Object> body) {
 		String token = (String) body.get("token"); 
 		String symbol = (String) body.get("symbol"); 
+		String actionType = (String) body.get("actionType");
+		String priceType = (String) body.get("priceType");
 		int quantity = (int) body.get("quantity");
-		boolean sale = (boolean) body.get("sale"); 
+		Double limitPrice = (Double) body.get("limitPrice");
+		Double stopPrice = (Double) body.get("stopPrice"); 
 		try {
-			orderService.orderNew(token, symbol, quantity, sale); 
+			orderService.orderNew(token, symbol, actionType, priceType, quantity, limitPrice, stopPrice);; 
 		}
 		catch (ClientRequestException e) {
 	        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

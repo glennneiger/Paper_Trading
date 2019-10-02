@@ -44,16 +44,19 @@ const actionOptions = [
         label: 'Buy',
     },
     {
-        value: 'sale',
-        label: 'Sale',
+        value: 'sell',
+        label: 'Sell',
     },
 ]
 
 const ComponentTrade: React.FC<Props> = props => {
     const classes = useStyles();
 
-    const [action, setAction] = React.useState('buy');
+    const [action, setAction] = React.useState<string>('buy');
+    const [priceType, setPriceType] = React.useState<string>('market');
     const [quantity, setQuantity] = React.useState(0);
+    const [limitPrice, setLimitPrice] = React.useState<null | number>(null);
+    const [stopPrice, setStopPrice] = React.useState<null | number>(null);
     const [successOpen, setSuccessOpen] = React.useState(false);
     const [errorOpen, setErrorOpen] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState<string>('');
@@ -69,7 +72,7 @@ const ComponentTrade: React.FC<Props> = props => {
         }
 
         HTTPClient
-            .postOrder(props.token, props.symbol, quantity, action === 'sale' ? true : false)
+            .postOrder(props.token, props.symbol, action, priceType, quantity, limitPrice, stopPrice)
             .then(response => {
                 setSuccessOpen(true);
                 setQuantity(0);
@@ -90,7 +93,7 @@ const ComponentTrade: React.FC<Props> = props => {
                         case 'insufficient-shares':
                             setErrorMessage('Insufficient shares in your account.');
                             break; 
-                        case 'insufficient-funds':
+                        case 'insufficient-fund':
                             setErrorMessage('Insufficient fund in your account.');
                             break; 
                         default:

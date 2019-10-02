@@ -8,4 +8,5 @@ public interface OrderDAO {
 	public Order findById(int id);
 	public void save(Order order);
 	public List<Order> findByUserId(int userId); 
+	public List<Order> findByStatus(String status);
 }
