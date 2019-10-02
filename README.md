@@ -39,7 +39,7 @@ http://ai-zixun.com/paper-trading
 
 
 
-## Instruction to Run Locally (via Docker)
+## Instruction to Run / Deploy (via Docker)
 
 1. Make sure that your local environment has docker installed. Please refer to the Docker documation on installation: https://docs.docker.com/install/ 
 2. Build React Application 
